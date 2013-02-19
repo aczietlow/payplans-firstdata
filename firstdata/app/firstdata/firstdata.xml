@@ -13,5 +13,20 @@
 	<description>
 		Firstdata allows access to the first data payment gateway.
 	</description>
+	<params addpath="/components/com_payplans/elements">
+		<param	name="store_name" 	
+					default="" 		
+					type="xitext" 	
+					size="50" 
+					label="Store Name"  
+					description="This is the ID of the store that was given to you by First Data. For example : 10123456789" 
+					class="store_name"
+					/>
+		<param name = "pay_mode" type = "xilist" label = "Pay Mode">
+	    		<option value = "payonly"> Pay Only </option>
+	    		<option value = "payplus"> Pay Plus </option>
+	    		<option value = "fullpay"> Full Pay </option>
+	    </param>
+	</params>
 </config>
 

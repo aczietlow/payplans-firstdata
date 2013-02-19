@@ -38,6 +38,18 @@ class PayplansAppFirstdata extends PayplansApp {
 	{
 		return true;
 	}
+	
+	/**
+	 * if app support payment cancel
+	 * @since 2.0
+	 */
+	public function isSupportPaymentCancellation($invoice)
+	{
+		if($invoice->isRecurring()){
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * onPayplansControllerCreation,this event is triggered just before creation of controller instance.
@@ -66,6 +78,18 @@ class PayplansAppFirstdata extends PayplansApp {
 				{
 					$paymentKey = JString::substr($paymentKey, 3);
 				}
+					
+				JRequest::setVar('payment_key', $paymentKey, 'POST');
+				return true;
+			}
+			
+			//for recurring payments
+			$paymentKey = JRequest::getVar('x_invoice_num', null);
+			if($paymentKey){
+				$prefix = JString::substr($paymentKey, 0,3);
+				if($prefix === 'PK_'){
+					$paymentKey = JString::substr($paymentKey, 3);
+				}
 				JRequest::setVar('payment_key', $paymentKey, 'POST');
 				return true;
 			}
@@ -83,10 +107,13 @@ class PayplansAppFirstdata extends PayplansApp {
 	{
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
+		
+		
 		$this->assign('post_url', XiRoute::_("index.php?option=com_payplans&view=payment&task=complete&payment_key=".$payment->getKey()));
 		$this->assign('payment', $payment);
 		$this->assign('invoice', $invoice);
 		$this->assign('amount', $amount);
+		
 		return $this->_render('form');
 	}
 	
