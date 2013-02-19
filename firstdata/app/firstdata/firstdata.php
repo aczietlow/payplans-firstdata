@@ -10,7 +10,10 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	protected $_location = __FILE__;
 
 
-	// isApplicable function is used to find whether the current app-instance should be triggered for given event and reference object.
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::isApplicable()
+	 */
 	function isApplicable($refObject = null, $eventName='')
 	{
 		// return true for event onPayplansControllerCreation
@@ -21,13 +24,16 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		return parent::isApplicable($refObject, $eventName);
 	}
 
-	//This event is triggered just before creation of controller instance.
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::onPayplansControllerCreation()
+	 */
 	function onPayplansControllerCreation($view, $controller, $task, $format)
 	{
 		if($view != 'payment' || ($task != 'notify') ){
 			return true;
 		}
-
+		
 		$paymentKey = JRequest::getVar('invoice', null);
 		if(!empty($paymentKey)){
 			JRequest::setVar('payment_key', $paymentKey, 'POST');
@@ -36,7 +42,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 		return true;
 	}
-
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::onPayplansPaymentForm()
+	 */
 	function onPayplansPaymentForm(PayplansPayment $payment, $data = null)
 	{
 		if(is_object($data)){
@@ -68,13 +78,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 		$this->assign('post_url', 'https://test.ipg-online.com/connect/gateway/processing');
 
-
-
-
-
 		return $this->_render('form');
 	}
-
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::onPayplansPaymentAfter()
+	 */
 	function onPayplansPaymentAfter(PayplansPayment $payment, $action, $data, $controller)
 	{
 		if($action == 'cancel'){
@@ -95,7 +105,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		// there is any error during the above process.
 		return parent::onPayplansPaymentAfter($payment, $action, $data, $controller);
 	}
-
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::onPayplansPaymentNotify()
+	 */
 	function onPayplansPaymentNotify($payment, $data, $controller)
 	{
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
@@ -120,7 +134,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 			
 	}
-
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see PayplansAppPayment::onPayplansPaymentTerminate()
+	 */
 	public function onPayplansPaymentTerminate(PayplansPayment $payment, $controller)
 	{
 		$transactions = $payment->getTransactions();
@@ -145,13 +163,29 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$txn->set('message', 'COM_PAYPLANS_PAYMENT_FOR_CANCEL_ORDER')->save();
 		return $this->_render('cancel_success');
 	}
-
+	
+	/**
+	 * Gets the current date and converts it to the correct date string for First Data
+	 * @return string $dateTime
+	 * current time in the correct date string
+	 */
 	protected function _getDateTime() {
 		$format = "Y:m:d-H:i:s";
 		$dateTime = date($format, $timestamp = time());
 		return $dateTime;
 	}
 
+	/**
+	 * 
+	 * @param int $storeId
+	 * The store name given to you by first data. Set during app install
+	 * @param float $chargetotal
+	 * The amount of the invoice
+	 * @param int $currency
+	 * The currency code. (840 => US, 987 => EU)
+	 * @return string $hash
+	 * secured hash for authenicating with First Data Connect
+	 */
 	protected function _createHash($storeId, $chargetotal, $currency) {
 		$sharedSecret = $this->getAppParam('shared_secret');
 		$stringToHash = $storeId . $this->_getDateTime() . $chargetotal .
