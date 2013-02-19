@@ -1,0 +1,17 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<config>
+	<name>Payplan - Firstdata</name>
+	<version>0.1.1</version>
+	<creationdate>Jan 2013</creationdate>
+	<author>Morris Media Network</author>
+	<authoremail>chris.zietlow@morris.com</authoremail>
+	<authorurl>http://morris.com</authorurl>
+	<copyright>2013</copyright>
+	<license>GNU General Public License v2</license>
+	<icon>firstdata.png</icon>
+	<tags>firstdata</tags>
+	<description>
+		Firstdata allows access to the first data payment gateway.
+	</description>
+</config>
+
