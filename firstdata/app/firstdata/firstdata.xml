@@ -22,6 +22,14 @@
 					description="This is the ID of the store that was given to you by First Data. For example : 10123456789" 
 					class="store_name"
 					/>
+		<param	name="shared_secret" 	
+					default="" 		
+					type="xitext" 	
+					size="50" 
+					label="Shared Secret"  
+					description="Shared secret as provided to you by first data" 
+					class="shared_secret"
+					/>
 		<param name = "pay_mode" type = "xilist" label = "Pay Mode">
 	    		<option value = "payonly"> Pay Only </option>
 	    		<option value = "payplus"> Pay Plus </option>
