@@ -76,7 +76,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$this->assign('responseSuccessURL', $root.'index.php?option=com_payplans&gateway=paypal&view=payment&task=complete&action=success&payment_key='.$payment->getKey());
 		$this->assign('responseFailURL', $root.'index.php?option=com_payplans&gateway=paypal&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey());
 
-		$this->assign('post_url', 'https://test.ipg-online.com/connect/gateway/processing');
+		$this->assign('post_url', 'https://www.linkpointcentral.com/lpc/servlet/lppay');
 
 		return $this->_render('form');
 	}
