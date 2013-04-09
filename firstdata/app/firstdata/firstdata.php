@@ -55,6 +55,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$data = (array)$data;
 		}
 		
+		krumo($_POST);
+		
 		if($this->getAppParam('test') == true) {
 // 			$url = "https://www.staging.linkpointcentral.com/lpc/servlet/lppay"; // for test
 			$url = "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing"; // for test
@@ -68,102 +70,82 @@ class PayplansAppFirstdata extends PayplansAppPayment {
     $time = $this->_getDateTime();
     $hash = $this->_createHash($this->getAppParam('store_name'), $amount, $time);
     $root = JURI::root();
-		
-    if ($_REQUEST['indentifier'] == TRUE) {
-		$postFields = array(
-			"txntype" => "sale",
-			"timezone" => "EST",
-			"txndatetime" => $time,
-			"hash" => $hash,
-			"storename" => $this->getAppParam('store_name'),
-			"mode" => $this->getAppParam('pay_mode'),
-			"chargetotal" => $amount,
-			"subtotal" => $amount,
-			"paymentMethod" => "V",
-			"trxOrigin" => "ECI",
-
-			//@TODO gather payment information from user!
-			//payment information
-			"cardnumber" => '4111111111111111',
-			'expmonth' => '11',
-			'expyear' => '2017',
-			
-			//payplans information
-			'order_id' => $invoice->getKey(),
-			'invoice' => $payment->getKey(), //*
-			'item_name' => $invoice->getTitle(),
-			'item_number' => $invoice->getKey(),
-				
-			//return information
-			'responseSuccessURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
-			'responseFailURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey(),
-		);
-		
-		// 		$this->assign('order_id', 		$invoice->getKey());
-		// 		$this->assign('invoice',		$payment->getKey());
-		// 		$this->assign('item_name',		$invoice->getTitle());
-		// 		$this->assign('item_number',	$invoice->getKey());
-		
-		// 		$root = JURI::root();
-		// 		//http://webdev01.devmags.com/~nbhacom/index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=8XRE0BAJGFS0
-		// 		$this->assign('responseSuccessURL', $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key='.$payment->getKey());
-		// 		$this->assign('responseFailURL', $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey());
-		
-		
-		$this->assign('postFields', $postFields);
-
-		$referer = 'http://webdev01.devmags.com/~nbhacom/zietlow_test/curl%20test/referer.php';
-		
-		$ch = curl_init();
-		
-		curl_setopt_array($ch, array(
-  		CURLOPT_URL => $url,
-//   		CURLOPT_FAILONERROR => TRUE, //debug
-  		CURLOPT_FOLLOWLOCATION => TRUE,
-//   		CURLOPT_RETURNTRANSFER => TRUE, 
-//   		CURLOPT_HEADER => TRUE,//debug (look at http header
-			CURLOPT_POST => TRUE,
-			CURLOPT_POSTFIELDS => $postFields,
-		 	CURLOPT_REFERER => $referer,
-		 	CURLOPT_USERAGENT => $_SERVER["HTTP_USER_AGENT"],
-//  			CURLOPT_VERBOSE => TRUE, //debug
-//  			CURLINFO_HEADER_OUT => TRUE, //debug
-			CURLOPT_SSL_VERIFYPEER => FALSE,
-			CURLOPT_FOLLOWLOCATION => TRUE,
-			)
-		);
+    $timezone = date('T');
     
-		//$this->assign('ch', $ch);
+    //build url
+    if($_SERVER['HTTPS'] == 'on'){
+    	$post_url = 'https://';
+    }
+    else {
+    	$post_url = 'http://';
+    }
+    
+    $post_url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $this->assign('post_url', $post_url);
+
+    //replace invalid timezone strings
+    if ($timezone == 'EDT') {
+    	$timezone == 'EST';
+    }
+//     if ($_REQUEST['identifier'] == TRUE) {
+			$this->assign('identifier', TRUE);    	
+			$postFields = array(
+				"txntype" => "sale",
+				"timezone" => 'EST',
+				"txndatetime" => $time,
+				"hash" => $hash,
+				"storename" => $this->getAppParam('store_name'),
+				"mode" => $this->getAppParam('pay_mode'),
+				"chargetotal" => $amount,
+				"subtotal" => $amount,
+				"paymentMethod" => $_POST['paymentMethod'],
+				"trxOrigin" => "ECI",
+	
+				//payment information
+				"cardnumber" => $_POST['cardnumber'],
+				'expmonth' => $_POST['expmonth'],
+				'expyear' => $_POST['expyear'],
+				
+				//payplans information
+				'order_id' => $invoice->getKey(),
+				'invoice' => $payment->getKey(), //*
+				'item_name' => $invoice->getTitle(),
+				'item_number' => $invoice->getKey(),
+					
+				//return information
+// 				'responseSuccessURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
+				'responseSuccessURL' => 'https://google.com',
+								
+// 				'responseFailURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey(),
+			);
+			
+			echo $postFields['responseSuccessURL'];
+			
+			$this->assign('postFields', $postFields);
+			
+			//@TODO build real referrer url
+			$referer = 'http://webdev01.devmags.com/~nbhacom/zietlow_test/curl%20test/referer.php';
+
+			if ($_REQUEST['identifier'] == TRUE) {
+					
+			$ch = curl_init();
+			curl_setopt_array($ch, array(
+	  		CURLOPT_URL => $url,
+	  		CURLOPT_FOLLOWLOCATION => TRUE,
+	//   		CURLOPT_RETURNTRANSFER => TRUE, //debug
+	//   		CURLOPT_HEADER => TRUE,//debug 
+				CURLOPT_POST => TRUE,
+				CURLOPT_POSTFIELDS => $postFields,
+			 	CURLOPT_REFERER => $referer,
+				CURLOPT_SSL_VERIFYPEER => FALSE,
+				CURLOPT_FOLLOWLOCATION => TRUE,
+				)
+			);
+	    
+			$this->assign('ch', $ch);
 		
     }
-		//firstdata info
-// 		$this->assign('txntype', 'sale'	);
-// 		$this->assign('timezone', 'EST'	);
-// 		$this->assign('txndatetime', $time);
-// 		$this->assign('hash', $hash);
-// 		$this->assign('storename', $this->getAppParam('store_name'));
-// 		$this->assign('mode', $this->getAppParam('pay_mode'));
-// 		$this->assign('chargetotal', $amount);
-// 		$this->assign('subtotal', $amount);
-// 		//$this->assign('currency', '840'); //USD | Not a valid field with connect 2.0
-// 		$this->assign('trxOrigin', 'ECI');
-// 		$this->assign('paymentMethod', 'visa');
-// 		$this->assign('authenticateTransaction', FALSE);
 
-
-// 		//order info
-// 		$this->assign('order_id', 		$invoice->getKey());
-// 		$this->assign('invoice',		$payment->getKey());
-// 		$this->assign('item_name',		$invoice->getTitle());
-// 		$this->assign('item_number',	$invoice->getKey());
-
-// 		$root = JURI::root();
-// 		//http://webdev01.devmags.com/~nbhacom/index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=8XRE0BAJGFS0
-// 		$this->assign('responseSuccessURL', $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key='.$payment->getKey());
-// 		$this->assign('responseFailURL', $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey());
-		
-// 		$this->assign('post_url', $root. 'plugins/payplans/firstdata/firstdata/app/firstdata/firstdataRequest.php');
-// 		return true;
 		return $this->_render('form');
 
 
@@ -175,17 +157,18 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	*/	 
 	function onPayplansPaymentAfter(PayplansPayment $payment, $action, $data, $controller)
 	{
+		echo "THIS IS SPARTA";
 		if($action == 'cancel'){
 			return true;
 		}
 		if($invoice->isRecurring()){
 
 			//Will create recurring profile and then post the data to the payment gateway.
-			$this->_processRecurringRequest($payment, $data);
+			//$this->_processRecurringRequest($payment, $data);
 		}
 		else {
 			//Will post the the data to the desired payment gateway.
-			$this->_processNonRecurringRequest($payment, $data);
+			//$this->_processNonRecurringRequest($payment, $data);
 		}
 		$payment->save();
 

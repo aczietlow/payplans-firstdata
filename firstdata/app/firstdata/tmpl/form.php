@@ -1,11 +1,8 @@
 <?php
 /**
-* @copyright	Copyright (C) 2009 - 2009 Ready Bytes Software Labs Pvt. Ltd. All rights reserved.
-* @license		GNU/GPL, see LICENSE.php
 * @package		PayPlans
 * @subpackage	Frontend
-* @contact 		shyam@readybytes.in
-* @ref 			https://www.x.com/docs/DOC-1332#id08A6HI00JQU
+* @contact 		chris.zietlow@morris.com
 */
 if(defined('_JEXEC')===false) die();?>
 <script>
@@ -21,46 +18,58 @@ function paypalSubmit()
 </script>
 
 
-<form action="<?php echo $post_url ?>"
-	  method="post" name="site_app_<?php echo $this->getName(); ?>_form" >
+  <form action="<?php echo $post_url ?>"  method="post" name="site_app_<?php echo $this->getName(); ?>_form" >
 	
+<!-- <form action="https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" -->
+	 
 	<?php 
+	if ($identifier == TRUE) {
 		curl_exec($ch);
-		curl_close($ch); ?>
+		curl_close($ch); 
+	}
+	?>
 
 	
-	<!--First Data INFO
-    txntype<input type='text' name='txntype' value='<?php echo $txntype;?>' />
-    timezone<input type='text' name='timezone' value='<?php echo $timezone;?>' />
-    txndatetime<input type='text' name='txndatetime' value='<?php echo $txndatetime;?>' />
-    hash<input type='text' name='hash' value='<?php echo $hash;?>' />
-    storename<input type='text' name='storename' value='<?php echo $storename;?>' />
-    mode<input type='text' name='mode' value='<?php echo $mode;?>' />
-    total<input type='text' name='chargetotal' value='<?php echo $chargetotal;?>' />
+	<!--First Data INFO -->
+		
+    txntype<input type='text' name='txntype' value='<?php echo $postFields['txntype'];?>' />
+    timezone<input type='text' name='timezone' value='<?php echo $postFields['timezone'];?>' />
+    txndatetime<input type='text' name='txndatetime' value='<?php echo $postFields['txndatetime'];?>' />
+    hash<input type='text' name='hash' value='<?php echo $postFields['hash'];?>' />
+    storename<input type='text' name='storename' value='<?php echo $postFields['storename'];?>' />
+    mode<input type='text' name='mode' value='<?php echo $postFields['mode'];?>' />
+    total<input type='text' name='chargetotal' value='<?php echo $postFields['chargetotal'];?>' />
   
-    subtotal<input type='text' name='subtotal' value='<?php echo $subtotal;?>' />
-    trxOrigin<input type="text" name="trxOrigin" value='<?php echo $trxOrigin;?>' />
+    subtotal<input type='text' name='subtotal' value='<?php echo $postFields['subtotal'];?>' />
+    trxOrigin<input type="text" name="trxOrigin" value='<?php echo $postFields['trxOrigin'];?>' />
      
-    PaymentMethod<input type="text" name="paymentMethod" value='<?php echo $paymentMethod;?>' />
-	 -->
  
-	<!--ORDER INFO
-    <input type='hidden' name='app_id'		value='<?php echo $this->getId();?>' />
+ <!--  
+  <input type='hidden' name='app_id'		value='<?php echo $this->getId();?>' />
 	<input type='hidden' name='order_id' 	value='<?php echo $order_id;?>' />
 	<input type='hidden' name='invoice' 	value='<?php echo $invoice; ?>'>
 	<input type='hidden' name='item_name' 	value='<?php echo $item_name;?>'>
 	<input type='hidden' name='item_number' value='<?php echo $item_number; ?>'>
-
-	<input type='hidden' name='responseSuccessURL' 			value='<?php echo $responseSuccessURL; ?>'>
-	<input type='hidden' name='responseFailURL' 	value='<?php echo $responseFailURL; ?>'>
-	<input type="hidden" name="notify_url" 		value="<?php echo $notify_url; ?>" />
 -->
- 
-	
+
+<label>Payment Method</label><select size="1" name="paymentMethod">
+	<OPTION value=V>Visa</OPTION>
+	<OPTION value=M>MasterCard</OPTION>
+	<OPTION value=A>American Express</OPTION> 
+	<OPTION value=D>Discover</OPTION> 
+	<OPTION value=J>JCB</OPTION>
+	<OPTION value=9>Check</OPTION>
+	<OPTION value="">Other</OPTION>
+ </select>
+ <label>Card Number</label><input type='text' name='cardnumber' />
+ <label>Expiration Month</label><input type='text' name='expmonth' />
+ <label>Expiration Year</label><input type='text' name='expyear' />
+
+ <input type="hidden" name="identifier" value="TRUE" />
 	<div id="payment-paypal" class="pp-payment-pay-process">		
 		<div id="payment-redirection">
 			<div class="pp-message pp-bold">
-				<?php echo XiText::_('COM_PAYPLANS_APP_PAYPAL_PAYMENT_REDIRECTION'); ?>
+				<?php //echo XiText::_('COM_PAYPLANS_APP_PAYPAL_PAYMENT_REDIRECTION'); ?>
 			</div>
 			
 			<div class=""></div>
@@ -68,7 +77,7 @@ function paypalSubmit()
 	
 		<div id="payment-submit" class="pp-gap-top20">
 			<button type="submit" class="pp-button ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-					name="payplans_payment_btn"><?php echo XiText::_('COM_PAYPLANS_PAYPAL_PAYMENT')?></button>
+					name="payplans_payment_btn">Payment</button>
 		</div>
 	</div>
 </form>
