@@ -1,0 +1,26 @@
+Welcome to the firstdata payment gateway connect plugin for the Joomla plug in component Payplans. Hopefully anyone using this outside our company will find it useful.
+
+Version: 0.9-beta
+
+Requirements:
+Joomla 1.5+
+Payplans v2.3+ (latest stable)
+access to firstdata connect 2.0 (enabled upon request in sandbox accounts)
+
+To install:
+Install as you would any other Joomla component, by going to extentions>add new.
+
+Once the plugin is installed you will need to instantiate it from within payplans. Go to the apps tab within payplans and click the new button
+yoursite + index.php?option=com_payplans&view=app
+
+Select the firstdata app in create an instance of it. This will take you a configuraion page where you can select payplans specific settings and your firstdata settings which I will explain 1 by 1 below
+
+Store Name: The store id provided by firstdata
+Shared Secret: The shared secret provided by firstdata. Log in to firstdata and go to admin>connect2.0 settings to generate a shared secret.
+Pay Mode: Select the payment mode you wish to use. (currently payonly mode is the only option supported)
+	PayOnly - firstdata collects minimum amount of data inorder to complete the transaction
+	PayPlus - Collects the same as PayOnly as well as billing informaiton
+	FullPay - Collect the same as PayOnly as well as shipping address
+Test: Determines wheather to use the firstdata sandbox processing or live process. WARNING testing in live processing can lead to transaction fees even if you delete the transactions later.
+
+
