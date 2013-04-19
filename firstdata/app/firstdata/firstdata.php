@@ -55,8 +55,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$data = (array)$data;
 		}
 		
-		
-		
 		if($this->getAppParam('test') == true) {
 			$url = "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing"; // for test
 		} else{
@@ -111,7 +109,25 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			'responseSuccessURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
 			'responseFailURL' => $root.'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key='.$payment->getKey(),
 		);
-			
+
+		if($invoice->isRecurring() != FALSE) {
+			$recurringFields = array(
+				'submode' => 'periodic',
+				'periodicity' => 'd',
+				'frequency' => '1',
+				'startdate' => $this->_getDate(),
+				'installments' => '10',
+				'threshold' => '1',
+			);
+			$count = 0;
+			foreach($recurringFields as $key => $value) {
+				$postFields[$key] = $value;
+				$count++;
+			}
+		}
+		krumo($this->_getDate());
+		krumo($postFields);
+		
 		$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
 		
@@ -249,6 +265,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$dateTime = date($format, $timestamp = time());
 		return $dateTime;
 	}
+	
+	protected function _getDate() {
+		$format = "Ymd";
+		$date = date($format, $timestampe = time());
+		return $date; 
+	}
+	
 
 	/**
 	 * @TODO update comments to PHP doc formatting
