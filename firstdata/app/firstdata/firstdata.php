@@ -125,8 +125,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				$count++;
 			}
 		}
-		krumo($this->_getDate());
-		krumo($postFields);
 		
 		$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
@@ -163,7 +161,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
     	return $this->_render('response_form');
     }
     
-		return $this->_render('form');
+    
+	return $this->_render('form');
 	}
 	
 	/**
@@ -186,11 +185,22 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		
 		//set up subscription profile for recurring payments
 		if(isset($data['x_subscription_id']) && $data['x_subscription_id'] ){
-			$transaction->set('user_id', $payment->getBuyer())
-			->set('gateway_subscr_id', isset($data['x_subscription_id']) ? $data['x_subscription_id'] : 0)
+			$transaction->set('gateway_subscr_id', isset($data['x_subscription_id']) ? $data['x_subscription_id'] : 0)
 			->set('gateway_parent_txn', isset($data['parent_txn_id']) ? $data['parent_txn_id'] : 0);
 		}
-
+		
+	$log = fopen($_SERVER['DOCUMENT_ROOT'] . '/firstdata.html', 'a');
+	$msg = $this->_getDateTime() . "<br />\n";
+	$msg .= '<pre>';
+	$methods = get_class_methods($this);
+	foreach ($methods as $key => $value) {
+		$msg .= "data[$key] = $value \n";
+	}
+	$msg .= '</pre>';
+	$msg .= "\n<br /><hr /><br />";
+	fwrite($log, $msg);
+	fclose($log);
+	
 	$transaction->set('user_id', $payment->getBuyer())
 	->set('invoice_id', $invoice->getId())
 	->set('payment_id', $payment->getId())
