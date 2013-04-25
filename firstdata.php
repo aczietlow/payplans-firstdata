@@ -24,7 +24,22 @@ class plgPayplansFirstdata extends XiPlugin
 		//add firstdata app path to app loader
 		$appPath = dirname(__FILE__).DS.'firstdata'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
-			
+
+		//Adding CSS & JS sheets
+		$document = &JFactory::getDocument();
+// 		$pluginDir = JURI::base(); // possible easier for building src paths
+		$css = JURI::base() . 'plugins' . DS . 'payplans' .
+				DS .'firstdata' . DS . 'firstdata' . DS . 'app' . DS . 'firstdata' . DS . 'firstdata.css';
+		$js = JURI::base() . 'plugins' . DS . 'payplans' .
+				DS .'firstdata' . DS . 'firstdata' . DS . 'app' . DS . 'firstdata' . DS . 'firstdata.js';
+		
+		
+		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');
+		$document->addScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js');
+		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
+		$document->addStyleSheet($css);
+		$document->addScript($js);
+
 		return true;
 	}
 	

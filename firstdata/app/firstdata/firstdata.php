@@ -56,14 +56,23 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		} else {
 			$url = "https://www.linkpointcentral.com/lpc/servlet/lppay"; // for live
 		}
-
+		
+		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
 		$time = $this->_getDateTime();
 		$hash = $this->_createHash($this->getAppParam('store_name'), $amount, $time);
 		$root = JURI::root();
 		$timezone = date('T');
-
+		
+		$subscription = PayplansApi::getSubscription($invoice->getId());
+		$methods = get_class_methods($subscription);
+		$params = $subscription->getParams();
+		echo "<pre>";
+// 		var_dump($params->data); //debug
+// 		var_dump($methods); //debug
+		echo "</pre>";
+		
 		//build url
 		if ($_SERVER['HTTPS'] == 'on') {
 			$post_url = 'https://';
@@ -96,8 +105,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				$count++;
 			}
 		}
-		krumo($this->_getDate());
-		krumo($postFields);
 
 		$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
@@ -113,17 +120,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$this->assign('ch', $ch);
 
 			return $this->_render('curl_form');
-		}
-
-		if ($_POST['status'] && isset($_POST['status'])) {
-			$responseFields = array();
-			foreach ($_POST as $key => $value) {
-				$responseFields[$key] = $value;
-			}
-			//     	$this->_processResponse($responseFields); //in progress
-			$this->assign('responseFields', $responseFields);
-
-			return $this->_render('response_form');
 		}
 
 		return $this->_render('form');
