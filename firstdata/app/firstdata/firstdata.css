@@ -1,0 +1,6 @@
+form[name='site_app_firstdata_form'] label{
+	display: block;
+}
+form[name='site_app_firstdata_form'] input{
+	display: block;
+}
