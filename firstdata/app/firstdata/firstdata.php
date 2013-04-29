@@ -47,16 +47,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	 * @see PayplansAppPayment::onPayplansPaymentForm()
 	 */
 	function onPayplansPaymentForm(PayplansPayment $payment, $data = null) {
+		//typecast data object to array
 		if (is_object($data)) {
 			$data = (array) $data;
 		}
-
-		if ($this->getAppParam('test') == true) {
-			$url = "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing"; // for test
-		} else {
-			$url = "https://www.linkpointcentral.com/lpc/servlet/lppay"; // for live
-		}
 		
+		//select to post to firstdata sandbox or live server.
+		$url = ($this->getAppParam('test')) ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
 		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
@@ -68,34 +65,43 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getId());
 		$methods = get_class_methods($subscription);
 		$params = $subscription->getParams();
-		echo "<pre>";
-// 		var_dump($params->data); //debug
-// 		var_dump($methods); //debug
-		echo "</pre>";
 		
 		//build url
-		if ($_SERVER['HTTPS'] == 'on') {
-			$post_url = 'https://';
-		} else {
-			$post_url = 'http://';
-		}
-		$post_url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
+		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 		//replace invalid timezone strings
 		if ($timezone == 'EDT') {
 			$timezone == 'EST';
 		}
 
-		$postFields = array("txntype" => "sale", "timezone" => 'EST', "txndatetime" => $time, "hash" => $hash, "storename" => $this->getAppParam('store_name'), "mode" => $this->getAppParam('pay_mode'), "chargetotal" => $amount, "subtotal" => $amount, "paymentMethod" => $_POST['paymentMethod'],
-				"trxOrigin" => "ECI", 
+		$postFields = array(
+				'txntype' => 'sale', 
+				'timezone' => $timezone, 
+				'txndatetime' => $time, 
+				'hash' => $hash, 
+				'storename' => $this->getAppParam('store_name'), 
+				'mode' => $this->getAppParam('pay_mode'), 
+				'chargetotal' => $amount, 
+				'subtotal' => $amount, 
+				'paymentMethod' => $_POST['paymentMethod'],
+				'trxOrigin' => "ECI", 
+				
 				//payment information
-				"cardnumber" => $_POST['cardnumber'], 'expmonth' => $_POST['expmonth'], 'expyear' => $_POST['expyear'], 
+				'cardnumber' => $_POST['cardnumber'], 
+				'expmonth' => $_POST['expmonth'], 
+				'expyear' => $_POST['expyear'],
+				 
 				//payplans information
-				'order_id' => $invoice->getKey(), 'invoice' => $payment->getKey(), //*
-				'item_name' => $invoice->getTitle(), 'item_number' => $invoice->getKey(), 
+				'order_id' => $invoice->getKey(), 
+				'invoice' => $payment->getKey(), //*
+				'item_name' => $invoice->getTitle(), 
+				'item_number' => $invoice->getKey(),
+				 
 				//return information
 				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
-				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),);
+				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
+		);
 
 		if ($invoice->isRecurring() != FALSE) {
 			$recurringFields = array('submode' => 'periodic', 'periodicity' => 'd', 'frequency' => '1', 'startdate' => $this->_getDate(), 'installments' => '10', 'threshold' => '1',);
