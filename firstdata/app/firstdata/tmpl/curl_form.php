@@ -8,7 +8,7 @@ if(defined('_JEXEC')===false) die();?>
 <script>
 window.onload = function() 
 {	
-	  setTimeout÷"paypalSubmit()", 2000);
+	  setTimeout("paypalSubmit()", 2000);
 }
 
 function paypalSubmit()

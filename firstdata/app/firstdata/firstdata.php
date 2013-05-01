@@ -52,8 +52,20 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$data = (array) $data;
 		}
 		
-		//select to post to firstdata sandbox or live server.
-		$url = ($this->getAppParam('test')) ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
+		switch($this->getAppParam('service')){
+			case ('api'):
+				//no idea what this is... yet
+				break;
+			case ('connect1.0'):
+				$url = ($this->getAppParam('test')) ? "https://www.staging.linkpointcentral.com/lpc/servlet/lppay" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
+				break;
+			case ('connect2.0'):
+				$url = ($this->getAppParam('test')) ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
+				break;
+			default:
+				//localhost testing address for testing posting data, and curl requests.
+				break;
+		}
 		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
@@ -81,7 +93,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'txndatetime' => $time, 
 				'hash' => $hash, 
 				'storename' => $this->getAppParam('store_name'), 
-				'mode' => $this->getAppParam('pay_mode'), 
+		    
+		    	'mode' => $this->getAppParam('pay_mode'), 
 				'chargetotal' => $amount, 
 				'subtotal' => $amount, 
 				'paymentMethod' => $_POST['paymentMethod'],
@@ -102,6 +115,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
 				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
 		);
+		$postFields = http_build_query($postFields);
 
 		if ($invoice->isRecurring() != FALSE) {
 			$recurringFields = array('submode' => 'periodic', 'periodicity' => 'd', 'frequency' => '1', 'startdate' => $this->_getDate(), 'installments' => '10', 'threshold' => '1',);
@@ -111,17 +125,22 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				$count++;
 			}
 		}
-
+    
 		$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
 
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
 			//@TODO build real referrer url
-			// 			$referer = 'https://webdev01.devmags.com/~nbhacom/zietlow_test/curl%20test/referer.php';
 			$referer = $root . 'firstdata/referer.php';
 
 			$ch = curl_init();
-			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_FOLLOWLOCATION => TRUE, CURLOPT_POST => TRUE, CURLOPT_POSTFIELDS => $postFields, CURLOPT_REFERER => $referer, CURLOPT_SSL_VERIFYPEER => FALSE,));
+			curl_setopt_array($ch, array(
+			  CURLOPT_URL => $url, 
+			  CURLOPT_FOLLOWLOCATION => TRUE, 
+			  CURLOPT_POST => TRUE, 
+			  CURLOPT_POSTFIELDS => $postFields, 
+			  CURLOPT_REFERER => $referer, 
+			  CURLOPT_SSL_VERIFYPEER => FALSE,));
 
 			$this->assign('ch', $ch);
 
