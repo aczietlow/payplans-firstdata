@@ -89,7 +89,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 		$postFields = array(
 				'txntype' => 'sale', 
-				'timezone' => $timezone, 
+				'timezone' => 'EST', //@TODO use timezone variable 
 				'txndatetime' => $time, 
 				'hash' => $hash, 
 				'storename' => $this->getAppParam('store_name'), 
@@ -118,7 +118,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$postFields = http_build_query($postFields);
 
 		if ($invoice->isRecurring() != FALSE) {
-			$recurringFields = array('submode' => 'periodic', 'periodicity' => 'd', 'frequency' => '1', 'startdate' => $this->_getDate(), 'installments' => '10', 'threshold' => '1',);
+			$recurringFields = array(
+					'submode' => 'periodic', 
+					'periodicity' => 'd', 
+					'frequency' => '1', 
+					'startdate' => $this->_getDate(), 
+					'installments' => '10', 
+					'threshold' => '1',);
 			$count = 0;
 			foreach ($recurringFields as $key => $value) {
 				$postFields[$key] = $value;
@@ -172,7 +178,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$transaction->set('user_id', $payment->getBuyer())->set('gateway_subscr_id', isset($data['x_subscription_id']) ? $data['x_subscription_id'] : 0)->set('gateway_parent_txn', isset($data['parent_txn_id']) ? $data['parent_txn_id'] : 0);
 		}
 
-		$transaction->set('user_id', $payment->getBuyer())->set('invoice_id', $invoice->getId())->set('payment_id', $payment->getId())->set('gateway_txn_id', isset($data['x_trans_id']) ? $data['x_trans_id'] : 0)->set('params', PayplansHelperParam::arrayToIni($data));
+		$transaction->set('user_id', $payment->getBuyer())
+					->set('invoice_id', $invoice->getId())
+					->set('payment_id', $payment->getId())
+					->set('gateway_txn_id', isset($data['x_trans_id']) ? $data['x_trans_id'] : 0)
+					->set('params', PayplansHelperParam::arrayToIni($data));
 
 		$status = rtrim($responseFields['status']);
 
