@@ -51,8 +51,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if (is_object($data)) {
 			$data = (array) $data;
 		}
-		
-		switch($this->getAppParam('service')){
+		$service = $this->getAppParam('service');
+		switch($service){
 			case ('api'):
 				//no idea what this is... yet
 				break;
@@ -107,7 +107,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				 
 				//payplans information
 				'order_id' => $invoice->getKey(), 
-				'invoice' => $payment->getKey(), //*
+				'invoice' => $payment->getKey(),
 				'item_name' => $invoice->getTitle(), 
 				'item_number' => $invoice->getKey(),
 				 
@@ -118,13 +118,24 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$postFields = http_build_query($postFields);
 
 		if ($invoice->isRecurring() != FALSE) {
-			$recurringFields = array(
+			if ($service == 'connect1.0') {
+				$recurringFields = array(
+					'submode' => 'periodic', 
+					'periodicity' => 'd1', 
+					'startdate' => $this->_getDate(),
+					'installments' => '10', //@TODO pulling recurrence from subscription
+					'threshold' => '1',);
+			}
+			if ($service == 'connect2.0') {
+				$recurringFields = array(
 					'submode' => 'periodic', 
 					'periodicity' => 'd', 
 					'frequency' => '1', 
-					'startdate' => $this->_getDate(), 
-					'installments' => '10', 
+					'startdate' => $this->_getDate(),
+					'installments' => '10', //@TODO pulling recurrence from subscription
 					'threshold' => '1',);
+			}
+			
 			$count = 0;
 			foreach ($recurringFields as $key => $value) {
 				$postFields[$key] = $value;
@@ -141,9 +152,9 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 			$ch = curl_init();
 			curl_setopt_array($ch, array(
-			  CURLOPT_URL => $url, 
+			  CURLOPT_URL => $url,
 			  CURLOPT_FOLLOWLOCATION => TRUE, 
-			  CURLOPT_POST => TRUE, 
+			  CURLOPT_POST => TRUE,
 			  CURLOPT_POSTFIELDS => $postFields, 
 			  CURLOPT_REFERER => $referer, 
 			  CURLOPT_SSL_VERIFYPEER => FALSE,));
@@ -254,7 +265,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	}
 
 	/**
-	 * @TODO update comments to PHP doc formatting
 	 * @param int $storeId
 	 * The store name given to you by first data. Set during app install
 	 * @param float $chargetotal
