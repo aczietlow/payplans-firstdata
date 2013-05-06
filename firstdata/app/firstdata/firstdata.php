@@ -104,7 +104,15 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'cardnumber' => $_POST['cardnumber'], 
 				'expmonth' => $_POST['expmonth'], 
 				'expyear' => $_POST['expyear'],
-				 
+				
+				//user info
+				'bname' => $_POST['bname'],
+				'baddr1' => $_POST['baddr1'],
+				'bcity' => $_POST['bcity'],
+				'bstate' => $_POST['bstate'],
+				'bzip' => $_POST['bzip'],
+				'phone' => $_POST['phone'],
+				
 				//payplans information
 				'order_id' => $invoice->getKey(), 
 				'invoice' => $payment->getKey(),
@@ -118,6 +126,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$postFields = http_build_query($postFields);
 
 		if ($invoice->isRecurring() != FALSE) {
+			
+			krumo($this->_getDate());
 			if ($service == 'connect1.0') {
 				$recurringFields = array(
 					'submode' => 'periodic', 

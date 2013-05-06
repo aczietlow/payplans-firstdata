@@ -60,6 +60,14 @@ function paypalSubmit()
  <label>Expiration Month</label><input type='text' name='expmonth' />
  <label>Expiration Year</label><input type='text' name='expyear' />
 
+ <?php if ($pay_mode != 'payonly'): ?>
+ <label>Name</label><input type='text' name='bname' />
+ <label>Address</label><input type='text' name='baddr1' />
+ <label>City</label><input type='text' name='bcity' />
+ <label>State</label><input type='text' name='bstate' />
+ <label>Zip</label><input type='text' name='bzip' />
+ <label>Phone</label><input type='text' name='phone' />
+<?php endif;?>
  <input type="hidden" name="identifier" value="TRUE" />
 	<div id="payment-paypal" class="pp-payment-pay-process">		
 		<div id="payment-redirection">
