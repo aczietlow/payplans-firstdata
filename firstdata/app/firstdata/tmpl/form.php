@@ -57,8 +57,8 @@ function paypalSubmit()
 	<OPTION value="">Other</OPTION>
  </select>
  <label>Card Number</label><input type='text' name='cardnumber' />
- <label>Expiration Month</label><input type='text' name='expmonth' />
- <label>Expiration Year</label><input type='text' name='expyear' />
+ <label>Expiration Month (ex: 08)</label><input type='text' placeholder="example: 08" name='expmonth' />
+ <label>Expiration Year (ex: 2015)</label><input type='text' placeholder="example: 2015" name='expyear' />
 
  <input type="hidden" name="identifier" value="TRUE" />
 	<div id="payment-paypal" class="pp-payment-pay-process">		

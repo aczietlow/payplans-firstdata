@@ -96,11 +96,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		    	'mode' => $this->getAppParam('pay_mode'), 
 				'chargetotal' => $amount, 
 				'subtotal' => $amount, 
-				'paymentMethod' => $_POST['paymentMethod'],
-				'trxOrigin' => "ECI", 
+				'trxOrigin' => "ECI",
+				'cctpye' => 'v', //connect 1.0
 				
 				//payment information
-				'cardnumber' => $_POST['cardnumber'], 
+				//'cardnumber' => $_POST['cardnumber'], 
 				'expmonth' => $_POST['expmonth'], 
 				'expyear' => $_POST['expyear'],
 				 
@@ -114,6 +114,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
 				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
 		);
+		
+		if($this->getAppParam('service') == 'connect2.0') {
+			$postFields['paymentMethod'] = $_POST['paymentMethod'];
+		}
+		
 		$postFields = http_build_query($postFields);
 
 		if ($invoice->isRecurring() != FALSE) {
