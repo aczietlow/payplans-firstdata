@@ -67,6 +67,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				break;
 		}
 		
+		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
 		$time = $this->_getDateTime();
@@ -75,8 +76,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getId());
-		$methods = get_class_methods($subscription);
-		$params = $subscription->getParams();
 		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
@@ -153,13 +152,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			}
 		}
     
-		$this->assign('postFields', $postFields);
+		//$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
-
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
 			//@TODO build real referrer url
 			$referer = $root . 'firstdata/referer.php';
-
 			$ch = curl_init();
 			curl_setopt_array($ch, array(
 			  CURLOPT_URL => $url,
