@@ -18,8 +18,7 @@ function paypalSubmit()
 // 	document.getElementById('resForm').hide();
 }
 </script>
-
-	<?php 
+	<?php
 	if ($identifier == TRUE && empty($_POST['status'])) {
 		curl_exec($ch);
 		curl_close($ch); 
