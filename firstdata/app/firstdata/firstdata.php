@@ -54,7 +54,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$service = $this->getAppParam('service');
 		switch($service){
 			case ('api'):
-				//no idea what this is... yet
+				//do we need this?
 				break;
 			case ('connect1.0'):
 				$url = ($this->getAppParam('test')) ? "https://www.staging.linkpointcentral.com/lpc/servlet/lppay" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
@@ -75,8 +75,15 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$root = JURI::root();
 		$timezone = date('T');
 		
-		$subscription = PayplansApi::getSubscription($invoice->getId());
+		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
+		//debug 
+		$methods = get_class_methods($this);
+		krumo($methods);
+		$subData = (array) $subscription;
+		krumo($subData);
+		krumo($subscription->isRecurring());
+		krumo($invoice->isRecurring());
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -126,7 +133,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 		if ($invoice->isRecurring() != FALSE) {
 			
-			krumo($this->_getDate());
 			if ($service == 'connect1.0') {
 				$recurringFields = array(
 					'submode' => 'periodic', 
@@ -182,18 +188,27 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if ($action == 'cancel') {
 			return true;
 		}
-
+		
+		$error = array();
+		
+		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
+		if ($invoice->isRecurring()) {
+// 			$this->_processRecurringRequest($payment, $data);
+		}
+		
 		foreach ($_POST as $key => $value) {
 			$responseFields[$key] = $value;
 		}
 
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$transaction = PayplansTransaction::getInstance();
-		$error = array();
+		
 
 		//set up subscription profile for recurring payments
 		if (isset($data['x_subscription_id']) && $data['x_subscription_id']) {
-			$transaction->set('user_id', $payment->getBuyer())->set('gateway_subscr_id', isset($data['x_subscription_id']) ? $data['x_subscription_id'] : 0)->set('gateway_parent_txn', isset($data['parent_txn_id']) ? $data['parent_txn_id'] : 0);
+			$transaction->set('user_id', $payment->getBuyer())
+						->set('gateway_subscr_id', isset($data['x_subscription_id']) ? $data['x_subscription_id'] : 0)
+						->set('gateway_parent_txn', isset($data['parent_txn_id']) ? $data['parent_txn_id'] : 0);
 		}
 
 		$transaction->set('user_id', $payment->getBuyer())
