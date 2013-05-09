@@ -83,3 +83,14 @@ form[name='site_app_firstdata_form'] button {
 form[name='site_app_firstdata_form'] button:hover {
 	background: #EF7247;
 }
+
+/* jQuery Validate 
+example: http://webdesigntutsplus.s3.amazonaws.com/tuts/214_html5_form_validation/demo/index.html
+*/
+div.success {
+	color: green;
+}
+
+div.error {
+	color: red;
+}

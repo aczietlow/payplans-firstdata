@@ -19,63 +19,81 @@ function paypalSubmit()
 
 <form action="<?php echo $post_url ?>"  method="post" name="site_app_<?php echo $this->getName(); ?>_form" >
 	<div class="personalInfo">
-	<!-- Personal Info (Full PayPlus Mode) -->
-	<label>Name<input type='text' name='name' /></label>
-	<label>Address<input type="text" name='address' /></label>
-	<label>City<input type="text" name='city' /></label>
-	<label>State<select size="1" name="state">
-		<option value = "AL"> Alabama </option>
-    	<option value = "AK"> Alaska </option>
-    	<option value = "AR"> Arkansas </option>
-    	<option value = "CA"> California </option>
-		<option value = "CT"> Connecticut </option>
-		<option value = "DE"> Delaware </option>
-		<option value = "FL"> Flordia </option>
-		<option value = "GA"> Georgia </option>
-		<option value = "HI"> Hawaii </option>
-		<option value = "ID"> Idaho </option>
-		<option value = "IL"> Illinois </option>
-		<option value = "IN"> Indiana </option>
-		<option value = "IA"> Iowa </option>
-		<option value = "KS"> Kansas </option>
-		<option value = "KY"> Kentucky </option>
-		<option value = "LA"> Louisiana </option>
-		<option value = "ME"> Maine </option>
-		<option value = "MD"> Maryland </option>
-		<option value = "MA"> Masschusetts </option>
-		<option value = "MI"> Michigan </option>
-		<option value = "MN"> Minnesota </option>
-		<option value = "MS"> Mississippi </option>
-		<option value = "MO"> Missouri </option>
-		<option value = "MT"> Montana </option>
-		<option value = "NE"> Nebraska </option>
-		<option value = "NV"> Nevada </option>
-		<option value = "NH"> New Hampshire </option>
-		<option value = "NJ"> New Jersey </option>
-		<option value = "NM"> New Mexico </option>
-		<option value = "NY"> New York </option>
-		<option value = "NC"> North Carolina </option>
-		<option value = "ND"> North Dakota </option>
-		<option value = "OH"> Ohio </option>
-		<option value = "OK"> Oklahoma </option>
-		<option value = "OR"> Oregon </option>
-		<option value = "PA"> Pennsylvania </option>
-		<option value = "RI"> Rhode Island </option>
-		<option value = "SC"> South Carolina </option>
-		<option value = "SD"> South Dakota </option>
-		<option value = "TN"> Tennessee </option>
-		<option value = "TX"> Texas </option>
-		<option value = "UT"> Utah </option>
-		<option value = "VT"> Vermont </option>
-		<option value = "VA"> Virginia </option>
-		<option value = "WA"> Washington </option>
-		<option value = "WV"> West Virginia </option>
-		<option value = "WI"> Wisconsin </option>
-		<option value = "WY"> Wyoming </option>
-	</select>
-	</label>
-	<label>Zip<input type="text" name='zip' /></label>
-	<label>Phone<input type="text" name='phone' /></label>
+		<!-- Personal Info (Full PayPlus Mode) -->
+		
+		<div class='firstdataInput'>
+			<label>Full Name<input type='text' name='name' placeholder="John Smith" data-required data-pattern="^([A-z]*((\s)))+[A-z]*$" /></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Address<input type="text" name='address' data-required /></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>City<input type="text" name='city' data-required/></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>State<select size="1" name="state">
+				<option value = "AL"> Alabama </option>
+		    	<option value = "AK"> Alaska </option>
+		    	<option value = "AR"> Arkansas </option>
+		    	<option value = "CA"> California </option>
+				<option value = "CT"> Connecticut </option>
+				<option value = "DE"> Delaware </option>
+				<option value = "FL"> Flordia </option>
+				<option value = "GA"> Georgia </option>
+				<option value = "HI"> Hawaii </option>
+				<option value = "ID"> Idaho </option>
+				<option value = "IL"> Illinois </option>
+				<option value = "IN"> Indiana </option>
+				<option value = "IA"> Iowa </option>
+				<option value = "KS"> Kansas </option>
+				<option value = "KY"> Kentucky </option>
+				<option value = "LA"> Louisiana </option>
+				<option value = "ME"> Maine </option>
+				<option value = "MD"> Maryland </option>
+				<option value = "MA"> Masschusetts </option>
+				<option value = "MI"> Michigan </option>
+				<option value = "MN"> Minnesota </option>
+				<option value = "MS"> Mississippi </option>
+				<option value = "MO"> Missouri </option>
+				<option value = "MT"> Montana </option>
+				<option value = "NE"> Nebraska </option>
+				<option value = "NV"> Nevada </option>
+				<option value = "NH"> New Hampshire </option>
+				<option value = "NJ"> New Jersey </option>
+				<option value = "NM"> New Mexico </option>
+				<option value = "NY"> New York </option>
+				<option value = "NC"> North Carolina </option>
+				<option value = "ND"> North Dakota </option>
+				<option value = "OH"> Ohio </option>
+				<option value = "OK"> Oklahoma </option>
+				<option value = "OR"> Oregon </option>
+				<option value = "PA"> Pennsylvania </option>
+				<option value = "RI"> Rhode Island </option>
+				<option value = "SC"> South Carolina </option>
+				<option value = "SD"> South Dakota </option>
+				<option value = "TN"> Tennessee </option>
+				<option value = "TX"> Texas </option>
+				<option value = "UT"> Utah </option>
+				<option value = "VT"> Vermont </option>
+				<option value = "VA"> Virginia </option>
+				<option value = "WA"> Washington </option>
+				<option value = "WV"> West Virginia </option>
+				<option value = "WI"> Wisconsin </option>
+				<option value = "WY"> Wyoming </option>
+			</select>
+			</label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Zip<input type="text" name='zip' data-required data-pattern="^\d{5}(-\d{4})?$" /></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Phone<input type="text" name='phone' data-required  /></label>
+		</div>
 	</div>
 	
 	<div class="ccInfo">
@@ -86,7 +104,7 @@ function paypalSubmit()
 	</select>
 	</label>
 	<label>Date of Birth<input type="text" id="date" name='dob' /></label>
-	<label>Social Security<input type="text" name='ssn' /></label>
+	<label>Social Security<input type="text" name='ssn' placeholder="999-999" /></label>
 	<label>District #<input type="text" name='compDistrict' /></label>
 	<label>Competing State<select size="1" name="compState">
 		<option value = "AL"> Alabama </option>

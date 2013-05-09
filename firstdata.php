@@ -27,11 +27,12 @@ class plgPayplansFirstdata extends XiPlugin
 
 		//Adding CSS & JS sheets
 		$document = &JFactory::getDocument();
-// 		$pluginDir = JURI::base(); // possible easier for building src paths
 		$css = JURI::base() . 'plugins' . DS . 'payplans' .
 				DS .'firstdata' . DS . 'firstdata' . DS . 'app' . DS . 'firstdata' . DS . 'firstdata.css';
 		$js = JURI::base() . 'plugins' . DS . 'payplans' .
 				DS .'firstdata' . DS . 'firstdata' . DS . 'app' . DS . 'firstdata' . DS . 'firstdata.js';
+		$jsVal = JURI::base() . 'plugins' . DS . 'payplans' .
+				DS .'firstdata' . DS . 'firstdata' . DS . 'app' . DS . 'firstdata' . DS . 'lib' . DS. 'jquery-validate.min.js';
 		
 		
 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');
@@ -39,6 +40,7 @@ class plgPayplansFirstdata extends XiPlugin
 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 		$document->addStyleSheet($css);
 		$document->addScript($js);
+		$document->addScript($jsVal);
 
 		return true;
 	}
