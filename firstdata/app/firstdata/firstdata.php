@@ -77,6 +77,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		
 		$subscription = PayplansApi::getSubscription($invoice->getId());
 		
+		
+		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
