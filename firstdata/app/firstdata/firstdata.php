@@ -75,9 +75,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$root = JURI::root();
 		$timezone = date('T');
 		
-		$subscription = PayplansApi::getSubscription($invoice->getId());
-		
-		
+		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
