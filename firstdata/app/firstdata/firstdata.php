@@ -87,6 +87,21 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 
 		$postFields = array(
+				//personal user data
+				'bname' => $_POST['name'],
+				'baddr1' => $_POST['address'],
+				'city' => $_POST['city'],
+				'state' => $_POST['state'],
+				'zip' => $_POST['zip'],
+				'phone' => $_POST['phone'],
+				
+				//nbha info
+				'sex' => $_POST['sex'],
+				'dob' => $_POST['dob'],
+				'ssn' => $_POST['ssn'],
+				'district' => $_POST['compDistrict'],
+				'compState' => $_POST['compstate'],
+				
 				'txntype' => 'sale', 
 				'timezone' => 'EST', //@TODO use timezone variable 
 				'txndatetime' => $time, 
