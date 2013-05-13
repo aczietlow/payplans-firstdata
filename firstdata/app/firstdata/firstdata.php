@@ -76,6 +76,12 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
+		$subscription2 = PayplansApi::getSubscription(203);
+		
+		
+		$params = $subscription2->getParams();
+		$results = $params->toArray();
+		krumo($results);
 		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
@@ -85,7 +91,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if ($timezone == 'EDT') {
 			$timezone == 'EST';
 		}
-
+		
+		//TODO: do these to be initialized before the form post back?
 		$postFields = array(
 				//personal user data
 				'bname' => $_POST['name'],
@@ -136,7 +143,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 // 		}
 		
 		$postFields = http_build_query($postFields);
-
 		if ($invoice->isRecurring() != FALSE) {
 			$recurringFields = array(
 					'submode' => 'periodic', 
@@ -152,9 +158,17 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			}
 		}
     
-		//$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
+			
+			$subscriptionDetails = $this->_getSubscriptionDetails();
+			foreach ($subscriptionDetails as $key => $value) {
+				$subscription->setParam($key,$value);
+				$postFields[$key] = $value;
+			}
+			
+			$subscription->save();
+			
 			//@TODO build real referrer url
 			$referer = $root . 'firstdata/referer.php';
 			$ch = curl_init();
@@ -293,5 +307,22 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$hex_str .= dechex(ord($str[$i]));
 		}
 		return hash('sha256', $hex_str);
+	}
+	
+	protected function _getSubscriptionDetails() {
+		$subscriptionDetails = array(
+				'bname' => $_POST['name'],
+				'baddr1' => $_POST['address'],
+				'bcity' => $_POST['bcity'],
+				'bstate' => $_POST['state'],
+				'bzip' => $_POST['zip'],
+				'phone' => $_POST['phone'],
+				'sex' => $_POST['sex'],
+				'dob' => $_POST['dob'],
+				'ssn' => $_POST['ssn'], //encrypt this!!!!!!!
+				'compDistrict' => $_POST['compDistrict'],
+				'compState' => $_POST['compState'],
+		);
+		return $subscriptionDetails;
 	}
 }

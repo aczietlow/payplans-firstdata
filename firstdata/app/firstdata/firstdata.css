@@ -42,6 +42,10 @@ form[name='site_app_firstdata_form'] input {
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 
+form[name='site_app_firstdata_form'] input.focus {
+	
+}
+
 form[name='site_app_firstdata_form'] select {
 	display: block;
 	height: 25px;
@@ -87,10 +91,62 @@ form[name='site_app_firstdata_form'] button:hover {
 /* jQuery Validate 
 example: http://webdesigntutsplus.s3.amazonaws.com/tuts/214_html5_form_validation/demo/index.html
 */
-div.success {
-	color: green;
+div.success input {
+	box-shadow: 0 0 5px #5CD053;
+	-moz-box-shadow: 0 0 5px #5CD053;
+	-webkit-box-shadow: 0 0 5px #5CD053;
+	border-color: #28921F;
 }
 
-div.error {
-	color: red;
+div.error input {
+	box-shadow: 0 0 5px #D45252;
+	-moz-box-shadow: 0 0 5px #D45252;
+	-webkit-box-shadow: 0 0 5px #D45252;
+	border-color: #B03535;
+}
+
+div.alert {
+	position: relative;
+	text-align: center;
+		border: 4px solid #666;
+		-webkit-border-radius: 30px;
+		-moz-border-radius: 30px;
+		border-radius: 30px;
+		-webkit-box-shadow: 2px 2px 4px #888;
+		-moz-box-shadow: 2px 2px 4px #888;
+		box-shadow: 2px 2px 4px #888;
+	float: left;   
+    margin: 5px 45px 5px 20px; 
+}
+
+div.alert:before {
+    background-color: #666;
+    content: ' ';
+    display: block;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+	left: -12px;
+    transform:             rotate( 29deg ) skew( -35deg );
+        -moz-transform:    rotate( 29deg ) skew( -35deg );
+        -ms-transform:     rotate( 29deg ) skew( -35deg );
+        -o-transform:      rotate( 29deg ) skew( -35deg );
+        -webkit-transform: rotate( 29deg ) skew( -35deg );
+    width:  20px;
+}
+
+div.alert:before {
+    background-color: #666;
+    content: ' ';
+    display: block;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+	left: -12px;
+    transform:             rotate( 29deg ) skew( -35deg );
+        -moz-transform:    rotate( 29deg ) skew( -35deg );
+        -ms-transform:     rotate( 29deg ) skew( -35deg );
+        -o-transform:      rotate( 29deg ) skew( -35deg );
+        -webkit-transform: rotate( 29deg ) skew( -35deg );
+    width:  20px;
 }
