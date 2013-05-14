@@ -24,19 +24,19 @@ function paypalSubmit()
 		<!-- Personal Info (Full PayPlus Mode) -->
 		<div id="name-description"></div>
 		<div class='firstdataInput'>
-			<label>Full Name<input type='text' name='name' placeholder="John Smith" data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
+			<label>Full Name<input type='text' name='name' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Address<input type="text" name='address' placeholder="699 Broad St" data-required /></label>
+			<label>Address<input type="text" name='address' data-required /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>City<input type="text" name='city' placeholder="Augusta" data-required/></label>
+			<label>City<input type="text" name='city' data-required/></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>State<select size="1" name="state">
+			<label>State<select size="1" name="state" >
 				<option value = "AL"> Alabama </option>
 		    	<option value = "AK"> Alaska </option>
 		    	<option value = "AR"> Arkansas </option>
@@ -90,11 +90,11 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Zip<input type="text" name='zip' placeholder="30901" data-required data-pattern="\d{5}(-\d{4})?" /></label>
+			<label>Zip<input type="text" name='zip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Phone<input type="text" name='phone' placeholder="706-278-0178" data-required data-pattern="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-?\d{4}"  /></label>
+			<label>Phone<input type="text" name='phone' data-required data-pattern="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-?\d{4}"  /></label>
 		</div>
 	</div>
 	
@@ -113,12 +113,12 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Social Security<input type="text" name='ssn' placeholder="111-22-7890" data-required data-pattern="\b[0-9]{3}-[0-9]{2}-[0-9]{4}\b" /></label>
+			<label>Social Security<input type="text" name='ssn' data-required data-pattern="\b[0-9]{3}-?[0-9]{2}-?[0-9]{4}\b" /></label>
 		</div>
 		
 		<!-- Add date pattern for ssn without slashes -->
 		<div class='firstdataInput'>
-			<label>District #<input type="text" name='compDistrict' placeholder="555" data-required /></label>
+			<label>District #<input type="text" name='compDistrict' data-required /></label>
 		</div>
 		
 		<div class='firstdataInput'>
@@ -187,7 +187,7 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Card Number<input type='text' name='cardnumber' placeholder="4111111111111111" data-required /></label>
+			<label>Card Number<input type='text' name='cardnumber' data-required /></label>
 		</div>
 		
 			<div class="cc_date_label">Expiration Date</div><select size="1" class="cc_date cc_date_month" name="expmonth">
