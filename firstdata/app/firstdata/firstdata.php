@@ -76,6 +76,12 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
+		$subscription2 = PayplansApi::getSubscription(203);
+		
+		
+		$params = $subscription2->getParams();
+		$results = $params->toArray();
+		krumo($results);
 		
 		//debug 
 		$methods = get_class_methods($this);
@@ -92,8 +98,24 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if ($timezone == 'EDT') {
 			$timezone == 'EST';
 		}
-
+		
+		//TODO: do these to be initialized before the form post back?
 		$postFields = array(
+				//personal user data
+				'bname' => $_POST['name'],
+				'baddr1' => $_POST['address'],
+				'city' => $_POST['city'],
+				'state' => $_POST['state'],
+				'zip' => $_POST['zip'],
+				'phone' => $_POST['phone'],
+				
+				//nbha info
+				'sex' => $_POST['sex'],
+				'dob' => $_POST['dob'],
+				'ssn' => $_POST['ssn'],
+				'district' => $_POST['compDistrict'],
+				'compState' => $_POST['compstate'],
+				
 				'txntype' => 'sale', 
 				'timezone' => 'EST', //@TODO use timezone variable 
 				'txndatetime' => $time, 
@@ -103,8 +125,9 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		    	'mode' => $this->getAppParam('pay_mode'), 
 				'chargetotal' => $amount, 
 				'subtotal' => $amount, 
+				'trxOrigin' => "ECI",
+				//'cctpye' => 'v', //connect 1.0
 				'paymentMethod' => $_POST['paymentMethod'],
-				'trxOrigin' => "ECI", 
 				
 				//payment information
 				'cardnumber' => $_POST['cardnumber'], 
@@ -129,8 +152,12 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
 				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
 		);
+		
+// 		if($this->getAppParam('service') == 'connect2.0') {
+// 			$postFields['paymentMethod'] = $_POST['paymentMethod'];
+// 		}
+		
 		$postFields = http_build_query($postFields);
-
 		if ($invoice->isRecurring() != FALSE) {
 			
 			if ($service == 'connect1.0') {
@@ -158,9 +185,17 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			}
 		}
     
-		//$this->assign('postFields', $postFields);
 		$this->assign('identifier', TRUE);
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
+			
+			$subscriptionDetails = $this->_getSubscriptionDetails();
+			foreach ($subscriptionDetails as $key => $value) {
+				$subscription->setParam($key,$value);
+				$postFields[$key] = $value;
+			}
+			
+			$subscription->save();
+			
 			//@TODO build real referrer url
 			$referer = $root . 'firstdata/referer.php';
 			$ch = curl_init();
@@ -307,5 +342,22 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$hex_str .= dechex(ord($str[$i]));
 		}
 		return hash('sha256', $hex_str);
+	}
+	
+	protected function _getSubscriptionDetails() {
+		$subscriptionDetails = array(
+				'bname' => $_POST['name'],
+				'baddr1' => $_POST['address'],
+				'bcity' => $_POST['bcity'],
+				'bstate' => $_POST['state'],
+				'bzip' => $_POST['zip'],
+				'phone' => $_POST['phone'],
+				'sex' => $_POST['sex'],
+				'dob' => $_POST['dob'],
+				'ssn' => $_POST['ssn'], //encrypt this!!!!!!!
+				'compDistrict' => $_POST['compDistrict'],
+				'compState' => $_POST['compState'],
+		);
+		return $subscriptionDetails;
 	}
 }
