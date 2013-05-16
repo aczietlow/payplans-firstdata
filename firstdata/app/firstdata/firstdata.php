@@ -76,20 +76,30 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
+		
+		//debug *************************
 		$subscription2 = PayplansApi::getSubscription(203);
 		
 		
 		$params = $subscription2->getParams();
 		$results = $params->toArray();
-		krumo($results);
+// 		krumo($results);
 		
-		//debug 
-		$methods = get_class_methods($this);
-		krumo($methods);
-		$subData = (array) $subscription;
-		krumo($subData);
-		krumo($subscription->isRecurring());
+		$testInvoice = PayplansApi::getInvoice(203);
+		
+		
+		
+		//demo code for processPayment **
+		
+		
+		krumo($transactions);
+		
+// 		$subData = (array) $subscription;
+// 		krumo($subData);
+// 		krumo($subscription->isRecurring());
 		krumo($invoice->isRecurring());
+			
+		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -276,7 +286,44 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 		return count($errors) ? implode("\n", $errors) : ' No Errors';
 	}
-
+	
+	public function processPayment(PayplansPayment $payment, $invoiceCount) {
+		
+		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
+		$invoice_count = $invoiceCount + 1;
+		$amount = $invoice->getTotal();
+		
+		//Check that invoice is recurring
+		if($invoice->isRecurring())
+		{	
+			//get all transaction against the invoice
+			$transactions = $invoice->getTransactions();
+	
+			if (!empty($transactions)) {
+				$transaction = end($transactions); //original transaction
+				$transParams = $this->_getTransactionParams($transaction, $payment->getKey());
+				$this->_processRecurringPayment($payment, $invoice, $amount, $transParams);
+			}
+		}
+	}
+	
+	protected function _processRecurringPayment($payment, $invoice, $amount, $transParams) {
+		//$recurrence_count 	= $recurrence_count - 1;
+		$transaction = PayplansTransaction::getInstance();
+		
+		$transaction->set('user_id', $invoice->getBuyer())
+		->set('invoice_id', $invoice->getId())
+		->set('payment_id', $payment->getId())
+		->set('amount', $amount)
+		->set('gateway_txn_id', isset($record['param6']) ? $record['param6'] : 0)
+		->set('message', 'SUCCESS');
+		
+		foreach ($transParams as $key => $value) {
+			$transaction->setParam($key, $value);
+		}
+		$transaction->save();
+	}
+	
 	/**
 	 * Process the response sent from fristdata.
 	 * 
@@ -354,10 +401,17 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'phone' => $_POST['phone'],
 				'sex' => $_POST['sex'],
 				'dob' => $_POST['dob'],
-				'ssn' => $_POST['ssn'], //encrypt this!!!!!!!
 				'compDistrict' => $_POST['compDistrict'],
 				'compState' => $_POST['compState'],
 		);
 		return $subscriptionDetails;
+	}
+	
+	protected function _getTransactionParams($transaction, $paymentKey) {
+		$params = $transaction->getParams()->toArray();
+		
+		$params['txndatetime'] = $this->_getDateTime();
+		$params['payment_key'] = $paymentKey;
+		return $params;
 	}
 }

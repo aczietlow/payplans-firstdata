@@ -112,13 +112,9 @@ function paypalSubmit()
 			<label>Date of Birth<input type="text" id="date" name='dob' data-required /></label>
 		</div>
 		
-		<div class='firstdataInput'>
-			<label>Social Security<input type="text" name='ssn' data-required data-pattern="\b[0-9]{3}-?[0-9]{2}-?[0-9]{4}\b" /></label>
-		</div>
-		
 		<!-- Add date pattern for ssn without slashes -->
 		<div class='firstdataInput'>
-			<label>District #<input type="text" name='compDistrict' data-required /></label>
+			<label>District #<input type="text" name='compDistrict' /></label>
 		</div>
 		
 		<div class='firstdataInput'>
