@@ -24,19 +24,19 @@ function paypalSubmit()
 		<!-- Personal Info (Full PayPlus Mode) -->
 		<div id="name-description"></div>
 		<div class='firstdataInput'>
-			<label>Full Name<input type='text' name='name' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
+			<label>Full Name *<input type='text' name='name' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Address<input type="text" name='address' data-required /></label>
+			<label>Address *<input type="text" name='address' data-required /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>City<input type="text" name='city' data-required/></label>
+			<label>City *<input type="text" name='city' data-required/></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>State<select size="1" name="state" >
+			<label>State *<select size="1" name="state" >
 				<option value = "AL"> Alabama </option>
 		    	<option value = "AK"> Alaska </option>
 		    	<option value = "AR"> Arkansas </option>
@@ -90,18 +90,22 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Zip<input type="text" name='zip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
+			<label>Zip *<input type="text" name='zip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Phone<input type="text" name='phone' data-required data-pattern="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-?\d{4}"  /></label>
+			<label>Phone *<input type="text" name='phone' data-required data-pattern="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-?\d{4}"  /></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Membership #<input type="text" name='membership' /></label>
 		</div>
 	</div>
 	
 	<div class="ccInfo">
 		<!-- NBHA specific information -->
 		<div class='firstdataInput'>
-			<label>Sex<select size="1" name="sex">
+			<label>Sex *<select size="1" name="sex">
 				<option value="M"> Male </option>
 				<option value="F"> Female </option>
 			</select>
@@ -109,7 +113,7 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Date of Birth<input type="text" id="date" name='dob' data-required /></label>
+			<label>Date of Birth *<input type="text" id="date" name='dob' data-required /></label>
 		</div>
 		
 		<!-- Add date pattern for ssn without slashes -->
@@ -118,7 +122,7 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Competing State<select size="1" name="compState">
+			<label>Competing State *<select size="1" name="compState">
 				<option value = "AL"> Alabama </option>
 		    	<option value = "AK"> Alaska </option>
 		    	<option value = "AR"> Arkansas </option>
@@ -173,7 +177,7 @@ function paypalSubmit()
 		
 		<!-- CC information (Pay Only) -->
 		<div class='firstdataInput'>
-			<label>Payment Method<select class="payment_method" size="1" name="paymentMethod">
+			<label>Payment Method *<select class="payment_method" size="1" name="paymentMethod">
 				<OPTION value=V>Visa</OPTION>
 				<OPTION value=M>MasterCard</OPTION>
 				<OPTION value=A>American Express</OPTION> 
@@ -183,10 +187,10 @@ function paypalSubmit()
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Card Number<input type='text' name='cardnumber' data-required /></label>
+			<label>Card Number *<input type='text' name='cardnumber' data-required /></label>
 		</div>
 		
-			<div class="cc_date_label">Expiration Date</div><select size="1" class="cc_date cc_date_month" name="expmonth">
+			<div class="cc_date_label">Expiration Date *</div><select size="1" class="cc_date cc_date_month" name="expmonth">
 				<OPTION value=1>1</OPTION>
 				<OPTION value=2>2</OPTION>
 				<OPTION value=3>3</OPTION> 

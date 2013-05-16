@@ -78,7 +78,10 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
-		
+		$subscription = PayplansApi::getSubscription(225);
+		$params = $subscription->getParams()->toArray();
+		$paramsHtml = $subscription->getParamsHtml('params');
+		echo($paramsHtml);
 
 		
 		
@@ -404,10 +407,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscriptionDetails = array(
 				'bname' => $_POST['name'],
 				'baddr1' => $_POST['address'],
-				'bcity' => $_POST['bcity'],
+				'bcity' => $_POST['city'],
 				'bstate' => $_POST['state'],
 				'bzip' => $_POST['zip'],
 				'phone' => $_POST['phone'],
+				'membership' => $_POST['membership'],
 				'sex' => $_POST['sex'],
 				'dob' => $_POST['dob'],
 				'compDistrict' => $_POST['compDistrict'],
