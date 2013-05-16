@@ -2,6 +2,7 @@
 
 defined('_JEXEC') or die();
 
+//using for debugging only
 include_once 'Krumo/class.krumo.php';
 
 /**
@@ -51,19 +52,18 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if (is_object($data)) {
 			$data = (array) $data;
 		}
+		
+		//get the type of firstdata service we are using (connect 1.0, api, etc)
 		$service = $this->getAppParam('service');
 		switch($service){
 			case ('api'):
-				//do we need this?
+				//@TODO do we need this?
 				break;
 			case ('connect1.0'):
 				$url = ($this->getAppParam('test')) ? "https://www.staging.linkpointcentral.com/lpc/servlet/lppay" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
 				break;
 			case ('connect2.0'):
 				$url = ($this->getAppParam('test')) ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
-				break;
-			default:
-				//localhost testing address for testing posting data, and curl requests.
 				break;
 		}
 		
@@ -78,27 +78,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
-		$subscription2 = PayplansApi::getSubscription(203);
+		
+
 		
 		
-		$params = $subscription2->getParams();
-		$results = $params->toArray();
-// 		krumo($results);
-		
-		$testInvoice = PayplansApi::getInvoice(203);
-		
-		
-		
-		//demo code for processPayment **
-		
-		
-		krumo($transactions);
-		
-// 		$subData = (array) $subscription;
-// 		krumo($subData);
-// 		krumo($subscription->isRecurring());
-		krumo($invoice->isRecurring());
-			
+		// end debug ***********************
 		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
@@ -126,20 +110,19 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'district' => $_POST['compDistrict'],
 				'compState' => $_POST['compstate'],
 				
+				//firstdata fields
 				'txntype' => 'sale', 
 				'timezone' => 'EST', //@TODO use timezone variable 
 				'txndatetime' => $time, 
 				'hash' => $hash, 
 				'storename' => $this->getAppParam('store_name'), 
-		    
 		    	'mode' => $this->getAppParam('pay_mode'), 
 				'chargetotal' => $amount, 
 				'subtotal' => $amount, 
 				'trxOrigin' => "ECI",
-				//'cctpye' => 'v', //connect 1.0
 				'paymentMethod' => $_POST['paymentMethod'],
 				
-				//payment information
+				//payment info
 				'cardnumber' => $_POST['cardnumber'], 
 				'expmonth' => $_POST['expmonth'], 
 				'expyear' => $_POST['expyear'],
@@ -152,32 +135,31 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'bzip' => $_POST['bzip'],
 				'phone' => $_POST['phone'],
 				
-				//payplans information
+				//payplans info
 				'order_id' => $invoice->getKey(), 
 				'invoice' => $payment->getKey(),
 				'item_name' => $invoice->getTitle(), 
 				'item_number' => $invoice->getKey(),
 				 
-				//return information
+				//return info
 				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
 				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
 		);
 		
-// 		if($this->getAppParam('service') == 'connect2.0') {
-// 			$postFields['paymentMethod'] = $_POST['paymentMethod'];
-// 		}
-		
 		$postFields = http_build_query($postFields);
+		
+		//if invoice is recurring
 		if ($invoice->isRecurring() != FALSE) {
-			
+			//recurring fields for connect 1.0
 			if ($service == 'connect1.0') {
 				$recurringFields = array(
 					'submode' => 'periodic', 
 					'periodicity' => 'd1', 
 					'startdate' => $this->_getDate(),
 					'installments' => '10', //@TODO pulling recurrence from subscription
-					'threshold' => '1',);
+					'threshold' => '1');
 			}
+			//recurring fields for connect 2.0
 			if ($service == 'connect2.0') {
 				$recurringFields = array(
 					'submode' => 'periodic', 
@@ -185,7 +167,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 					'frequency' => '1', 
 					'startdate' => $this->_getDate(),
 					'installments' => '10', //@TODO pulling recurrence from subscription
-					'threshold' => '1',);
+					'threshold' => '1');
 			}
 			
 			$count = 0;
@@ -194,11 +176,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				$count++;
 			}
 		}
-    
+		
 		$this->assign('identifier', TRUE);
+		//if our form data has been posted back to controller
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
 			
 			$subscriptionDetails = $this->_getSubscriptionDetails();
+			
 			foreach ($subscriptionDetails as $key => $value) {
 				$subscription->setParam($key,$value);
 				$postFields[$key] = $value;
@@ -209,6 +193,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			//@TODO build real referrer url
 			$referer = $root . 'firstdata/referer.php';
 			$ch = curl_init();
+			
 			curl_setopt_array($ch, array(
 			  CURLOPT_URL => $url,
 			  CURLOPT_FOLLOWLOCATION => TRUE, 
@@ -237,9 +222,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$error = array();
 		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
-		if ($invoice->isRecurring()) {
-// 			$this->_processRecurringRequest($payment, $data);
-		}
 		
 		foreach ($_POST as $key => $value) {
 			$responseFields[$key] = $value;
@@ -287,6 +269,12 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		return count($errors) ? implode("\n", $errors) : ' No Errors';
 	}
 	
+	/**
+	 * Hook that is triggered when subscription changes to expired status
+	 * 
+	 * @param PayplansPayment $payment
+	 * @param int $invoiceCount
+	 */
 	public function processPayment(PayplansPayment $payment, $invoiceCount) {
 		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
@@ -307,6 +295,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param PayplansPayment $payment
+	 * @param PayplansInvoice $invoice
+	 * @param int $amount
+	 * @param Array $transParams
+	 */
 	protected function _processRecurringPayment($payment, $invoice, $amount, $transParams) {
 		//$recurrence_count 	= $recurrence_count - 1;
 		$transaction = PayplansTransaction::getInstance();
@@ -353,6 +348,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 	/**
 	 * Gets the current date and converts it to the correct date string for First Data
+	 * 
 	 * @return string $dateTime
 	 * current time in the correct date string
 	 */
@@ -362,6 +358,11 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		return $dateTime;
 	}
 
+	/**
+	 * Gets the current data and converts it to the correct date string for First Data recurring fields
+	 * 
+	 * @return string
+	 */
 	protected function _getDate() {
 		$format = "Ymd";
 		$date = date($format, $timestampe = time());
@@ -369,6 +370,8 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	}
 
 	/**
+	 * Creates secure hash for First Data connect 2.0 secured hash field
+	 * 
 	 * @param int $storeId
 	 * The store name given to you by first data. Set during app install
 	 * @param float $chargetotal
@@ -391,6 +394,12 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		return hash('sha256', $hex_str);
 	}
 	
+	
+	/**
+	 * Gets subscription details from posted form data and converts them into an array
+	 * 
+	 * @return array:subscriptionDetails
+	 */
 	protected function _getSubscriptionDetails() {
 		$subscriptionDetails = array(
 				'bname' => $_POST['name'],
@@ -407,9 +416,15 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		return $subscriptionDetails;
 	}
 	
+	/**
+	 * Gets params from current tranaction
+	 * 
+	 * @param PayplansTransaction $transaction
+	 * @param PayplansPayment->key $paymentKey
+	 * @return array:params
+	 */
 	protected function _getTransactionParams($transaction, $paymentKey) {
 		$params = $transaction->getParams()->toArray();
-		
 		$params['txndatetime'] = $this->_getDateTime();
 		$params['payment_key'] = $paymentKey;
 		return $params;
