@@ -78,13 +78,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
-		$subscription = PayplansApi::getSubscription(225);
-		$params = $subscription->getParams()->toArray();
-		$paramsHtml = $subscription->getParamsHtml('params');
-		echo($paramsHtml);
-
-		
-		
 		// end debug ***********************
 		
 		//build url
