@@ -40,6 +40,15 @@
 	    		<option value = "connect2.0"> Connect 2.0 </option>
 	    		<option value = "connect1.0"> Connect 1.0 </option>
 	    </param>
+	    <param	name="emails" 	
+					default="" 
+					rows = "4" 
+					cols = "50"
+					type="xitextarea" 	
+					label="Admins' Emails"  
+					description="Seperate emails with a ',' ex: andrew.zietlow@morris.com, chris.zietlow@morris.com" 
+					class="emails"
+					/>
 	 <param name = "test"
 	   type = "xilist" 
 	   label = "Test"

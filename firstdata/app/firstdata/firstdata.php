@@ -78,6 +78,20 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
+		$transaction = PayplansApi::getTransaction(94);
+		$user		 = PayplansUser::getInstance($transaction->getBuyer());
+		
+		$emailAddresses = $this->getAppParam('emails');
+		$emailAddresses = explode(',', $emailAddresses);
+		krumo($emailAddresses);
+		
+		$methods = get_class_methods($subscription);
+		krumo($methods);
+		krumo($user->getEmail());
+		krumo($subscription->getId());
+		$params = PayplansApi::getTransaction(94)->getParams()->toArray();
+		$params = PayplansApi::getTransaction(94)->getProperties();
+		krumo($params);
 		// end debug ***********************
 		
 		//build url
@@ -263,6 +277,57 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$transaction->save();
 
 		return count($errors) ? implode("\n", $errors) : ' No Errors';
+	}
+	
+	public function onPayplansPaymentTerminate(PayplansPayment $payment, $controller)
+	{
+		$transactions = $payment->getTransactions();
+		foreach($transactions as $value){
+			$subscriptionId = $value->get('gateway_subscr_id', 0);
+			if(!empty($subscriptionId)){
+				break; //Not sure why we are checking for this 
+			}
+		}
+	
+		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
+		$transaction = PayplansTransaction::getInstance();
+		$transaction->set('user_id', $payment->getBuyer())
+		->set('invoice_id', $invoice->getId())
+		->set('payment_id', $payment->getId())
+		->set('gateway_txn_id', isset($data['x_trans_id']) ? $data['x_trans_id'] : 0)
+		->set('gateway_subscr_id', $subscriptionId)
+		->set('gateway_parent_txn', isset($data['parent_txn_id']) ? $data['parent_txn_id'] : 0);
+	
+		$transaction->set('message', 'COM_PAYPLANS_PAYMENT_FOR_CANCEL_ORDER')->save();
+		
+		$params = new XiParameter();
+		$params->set('pending_recur_count', 0);
+		$payment->set('gateway_params', $params)
+								->save();
+		$user = PayplansUser::getInstance($transaction->getBuyer());
+		$realName = $user->getRealName();
+		
+		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
+		$subscriptionId = $subscription->getId();
+		$message = "$realName has requested to cancel their subscription." .
+					"Use the link below to view their subscription information." .
+					"http://webdev01.devmags.com/~nbhacom/administrator/index.php?option=com_payplans&view=subscription&task=edit&id=$subscriptionId";
+		$subject = "CANCEL ORDER FOR NBHA";
+		$headers =  $headers = 'From: chris.zietlow@morris.com' . "\r\n" .
+				    'Reply-To: chris.zietlow@morris.com' . "\r\n" .
+				    'X-Mailer: PHP/' . phpversion();
+		
+		//comma seperate list of email addresses
+		$emailAddresses = $this->getAppParam('emails');
+		$emailAddresses = explode(',', $emailAddresses);
+		
+		foreach($emailAddresses as $value) {
+			mail($value, $subject, $message, $headers);
+		}
+				
+		
+		
+		return $this->_render('cancel_success');
 	}
 	
 	/**
