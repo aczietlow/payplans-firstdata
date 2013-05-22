@@ -217,11 +217,8 @@ function paypalSubmit()
 			</select>
 		
 		<input type="hidden" name="identifier" value="TRUE" />
-		
-		<div id="payment-paypal" class="pp-payment-pay-process">		
-			<div id="payment-submit" class="pp-gap-top20">
-				<button type="submit" name="payplans_payment_btn">Payment</button>
-			</div>
+		<div id="payment-submit" class="pp-gap-top20">
+			<button type="submit" name="payplans_payment_btn">Payment</button>
 		</div>
 	</div>
 </form>
