@@ -3,20 +3,22 @@
  */
 
 jQuery(document).ready(function() {
+	//set all select inputs to a blank value.
+	
 	//add datapicker width to dob field
-	jQuery('#date').datepicker();
+	$('#date').datepicker();
 	
 	//set all select inputs to a blank value.
-	jQuery("form[name='site_app_firstdata_form'] select").prop('selectedIndex', -1);	
+	$("form[name='site_app_firstdata_form'] select").prop('selectedIndex', -1);	
 	
 	//add validate functionality to the input fields
-	jQuery("form[name='site_app_firstdata_form']").validate({
+	$("form[name='site_app_firstdata_form']").validate({
 		onChange : true,
 		eachValidField : function() {
-			jQuery(this).closest('div.firstdataInput').removeClass('error').addClass('success');
+			$(this).closest('div.firstdataInput').removeClass('error').addClass('success');
 		},
 		eachInvalidField : function() {
-			jQuery(this).closest('div.firstdataInput').removeClass('success').addClass('error');
+			$(this).closest('div.firstdataInput').removeClass('success').addClass('error');
 		},
 //		description: {
 //			name: {

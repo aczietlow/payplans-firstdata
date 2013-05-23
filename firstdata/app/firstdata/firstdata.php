@@ -78,20 +78,20 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
-		$transaction = PayplansApi::getTransaction(94);
-		$user		 = PayplansUser::getInstance($transaction->getBuyer());
+// 		$transaction = PayplansApi::getTransaction(94);
+// 		$user		 = PayplansUser::getInstance($transaction->getBuyer());
 		
-		$emailAddresses = $this->getAppParam('emails');
-		$emailAddresses = explode(',', $emailAddresses);
-		krumo($emailAddresses);
+// 		$emailAddresses = $this->getAppParam('emails');
+// 		$emailAddresses = explode(',', $emailAddresses);
+// 		krumo($emailAddresses);
 		
-		$methods = get_class_methods($subscription);
-		krumo($methods);
-		krumo($user->getEmail());
-		krumo($subscription->getId());
-		$params = PayplansApi::getTransaction(94)->getParams()->toArray();
-		$params = PayplansApi::getTransaction(94)->getProperties();
-		krumo($params);
+// 		$methods = get_class_methods($subscription);
+// 		krumo($methods);
+// 		krumo($user->getEmail());
+// 		krumo($subscription->getId());
+// 		$params = PayplansApi::getTransaction(94)->getParams()->toArray();
+// 		$params = PayplansApi::getTransaction(94)->getProperties();
+// 		krumo($params);
 		// end debug ***********************
 		
 		//build url
