@@ -3,8 +3,6 @@
  */
 
 jQuery(document).ready(function() {
-	//set all select inputs to a blank value.
-	
 	//add datapicker width to dob field
 	$('#date').datepicker();
 	
