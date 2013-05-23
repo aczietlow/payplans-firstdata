@@ -78,6 +78,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
+		krumo($url);
 // 		$transaction = PayplansApi::getTransaction(94);
 // 		$user		 = PayplansUser::getInstance($transaction->getBuyer());
 		
