@@ -60,10 +60,10 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				//@TODO do we need this?
 				break;
 			case ('connect1.0'):
-				$url = ($this->getAppParam('test')) ? "https://www.staging.linkpointcentral.com/lpc/servlet/lppay" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
+				$url = ($this->getAppParam('test') === "1") ? "https://www.staging.linkpointcentral.com/lpc/servlet/lppay" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
 				break;
 			case ('connect2.0'):
-				$url = ($this->getAppParam('test')) ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
+				$url = ($this->getAppParam('test') === "1") ? "https://connect.merchanttest.firstdataglobalgateway.com/IPGConnect/gateway/processing" : "https://www.linkpointcentral.com/lpc/servlet/lppay";
 				break;
 		}
 		
