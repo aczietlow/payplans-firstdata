@@ -50,12 +50,21 @@
 					class="emails"
 					/>
 	 <param name = "test"
-	   type = "xilist" 
-	   label = "Test"
-	   description = "Url staging linkpoint site for testing, or use the production site for actual transactions. Warning: there can be transaction fees from testing transactions on the production linkpoint site. ">
-	     <option value = "true"> True </option>
-	     <option value = "notTrue"> False </option>
-	   </param> 
+	   		type = "radio" 
+	   		label = "Test"
+	   		description = "Url staging linkpoint site for testing, or use the production site for actual transactions. Warning: there can be transaction fees from testing transactions on the production linkpoint site. ">
+	     <option value = "1"> True </option>
+	     <option value = "0"> False </option>
+	   </param>
+
+	   	<param  name="allow_recurring_cancel" 
+        		type="radio" 
+        		default="0" 
+        		label="Allow recurring cancel" 
+        		description="Allowing users to actually cancel their subscriptions">
+		   	<option value="0">No</option>
+			<option value="1">Yes</option>
+        </param>
 	</params>
 </config>
 

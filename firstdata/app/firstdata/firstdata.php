@@ -78,7 +78,26 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
 		//debug *************************
+		
+		
 // 		$transaction = PayplansApi::getTransaction(94);
+// 		$params = $this->_getTransactionParams($transaction, '555');
+		
+// 		$newTransaction = PayplansTransaction::getInstance();
+// 		foreach ($params as $key => $value) {
+// 			$newTransaction->setParam($key, $value);
+// 		}
+// 		$newParams = $this->_getTransactionParams($newTransaction, '2153');
+// 		krumo($newParams);
+		
+// 		$testPayment = PayplansApi::getPayment(38);
+// 		$methods = get_class_methods($testPayment);
+// 		$testTrans = $testPayment->getTransactions();
+// 		krumo($methods);
+// 		krumo($testTrans);
+		
+		
+		
 // 		$user		 = PayplansUser::getInstance($transaction->getBuyer());
 		
 // 		$emailAddresses = $this->getAppParam('emails');
