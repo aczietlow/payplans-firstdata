@@ -121,7 +121,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if ($timezone == 'EDT') {
 			$timezone == 'EST';
 		}
-		
 		//TODO: do these to be initialized before the form post back?
 		$postFields = array(
 				//personal user data
@@ -131,13 +130,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'state' => $_POST['state'],
 				'zip' => $_POST['zip'],
 				'phone' => $_POST['phone'],
-				
-				//nbha info
-				'sex' => $_POST['sex'],
-				'dob' => $_POST['dob'],
-				'ssn' => $_POST['ssn'],
-				'district' => $_POST['compDistrict'],
-				'compState' => $_POST['compstate'],
 				
 				//firstdata fields
 				'txntype' => 'sale', 
@@ -156,12 +148,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'expmonth' => $_POST['expmonth'], 
 				'expyear' => $_POST['expyear'],
 				
-				//user info
-				'bname' => $_POST['bname'],
-				'baddr1' => $_POST['baddr1'],
-				'bcity' => $_POST['bcity'],
-				'bstate' => $_POST['bstate'],
-				'bzip' => $_POST['bzip'],
 				'phone' => $_POST['phone'],
 				
 				//payplans info
@@ -468,6 +454,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		//return sha1($ascii);
 
 		$str = $storename . $time . $chargetotal . $sharedSecret;
+		$hex_str = '';
 		for ($i = 0; $i < strlen($str); $i++) {
 			$hex_str .= dechex(ord($str[$i]));
 		}
@@ -488,11 +475,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				'bstate' => $_POST['state'],
 				'bzip' => $_POST['zip'],
 				'phone' => $_POST['phone'],
-				'membership' => $_POST['membership'],
-				'sex' => $_POST['sex'],
-				'dob' => $_POST['dob'],
-				'compDistrict' => $_POST['compDistrict'],
-				'compState' => $_POST['compState'],
 		);
 		return $subscriptionDetails;
 	}

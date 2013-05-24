@@ -4,7 +4,6 @@
 
 jQuery(document).ready(function() {
 	//add datapicker width to dob field
-	$('#date').datepicker();
 	
 	//set all select inputs to a blank value.
 	$("form[name='site_app_firstdata_form'] select").prop('selectedIndex', -1);	

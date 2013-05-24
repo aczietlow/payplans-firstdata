@@ -99,8 +99,8 @@ div.success input {
 }
 
 div.error input {
-	box-shadow: 0 0 5px #D45252;
-	-moz-box-shadow: 0 0 5px #D45252;
-	-webkit-box-shadow: 0 0 5px #D45252;
-	border-color: #B03535;
+       box-shadow: 0 0 5px #D45252;
+       -moz-box-shadow: 0 0 5px #D45252;
+       -webkit-box-shadow: 0 0 5px #D45252;
+       border-color: #B03535;
 }
