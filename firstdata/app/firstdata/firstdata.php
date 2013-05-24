@@ -67,7 +67,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 				break;
 		}
 		
-		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
 		$amount = $invoice->getTotal();
 		$time = $this->_getDateTime();
@@ -116,7 +115,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
 		//replace invalid timezone strings
 		if ($timezone == 'EDT') {
 			$timezone == 'EST';
@@ -468,6 +466,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		//return sha1($ascii);
 
 		$str = $storename . $time . $chargetotal . $sharedSecret;
+		$hex_str = '';
 		for ($i = 0; $i < strlen($str); $i++) {
 			$hex_str .= dechex(ord($str[$i]));
 		}
