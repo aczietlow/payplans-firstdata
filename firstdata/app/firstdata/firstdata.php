@@ -171,7 +171,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 					'submode' => 'periodic', 
 					'periodicity' => 'd1', 
 					'startdate' => $this->_getDate(),
-					'installments' => '10', //@TODO pulling recurrence from subscription
+					'installments' => '100', //@TODO pulling recurrence from subscription
 					'threshold' => '1');
 			}
 			//recurring fields for connect 2.0
@@ -181,7 +181,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 					'periodicity' => 'd', 
 					'frequency' => '1', 
 					'startdate' => $this->_getDate(),
-					'installments' => '10', //@TODO pulling recurrence from subscription
+					'installments' => '100', //@TODO pulling recurrence from subscription
 					'threshold' => '1');
 			}
 			

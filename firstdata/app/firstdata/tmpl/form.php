@@ -40,6 +40,7 @@ function paypalSubmit()
 				<option value = "AL"> Alabama </option>
 		    	<option value = "AK"> Alaska </option>
 		    	<option value = "AR"> Arkansas </option>
+		    	<option value = "AZ"> Arizona </option>
 		    	<option value = "CA"> California </option>
 				<option value = "CT"> Connecticut </option>
 				<option value = "DE"> Delaware </option>
@@ -145,7 +146,7 @@ function paypalSubmit()
 		
 		<input type="hidden" name="identifier" value="TRUE" />
 		<div id="payment-submit" class="pp-gap-top20">
-			<button type="submit" name="payplans_payment_btn">Payment</button>
+			<button type="submit" name="payplans_payment_btn">Pay Now</button>
 		</div>
 	</div>
 </form>

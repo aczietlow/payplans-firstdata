@@ -10,36 +10,19 @@ div.ccInfo {
 	margin-right: 30px;  
 }
 form[name='site_app_firstdata_form'] {
-	background: -webkit-gradient(linear, bottom, left 175px, from(#CCCCCC), to(#EEEEEE));
-	background: -moz-linear-gradient(bottom, #CCCCCC, #EEEEEE 175px);
 	margin: auto;
 /*  position: relative; 
 	width: 540px;  */
 	height: 525px; 
 	line-height: 24px;
-	font-weight: bold;
-	color: #00649C;
-	
+	font-weight: bold;	
 	text-decoration: none;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
 	padding: 10px;
-	border: 1px solid #999;
-	border: inset 1px solid #333;
-	-webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 
 form[name='site_app_firstdata_form'] input {
 	width: 150px;
 	display: block;
-	border: 1px solid #999;
-	height: 25px;
-	-webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 
 form[name='site_app_firstdata_form'] input.focus {
@@ -48,10 +31,6 @@ form[name='site_app_firstdata_form'] input.focus {
 
 form[name='site_app_firstdata_form'] select {
 	display: block;
-	height: 25px;
-	-webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 
 form[name='site_app_firstdata_form'] select {
@@ -61,7 +40,6 @@ form[name='site_app_firstdata_form'] select {
 
 form[name='site_app_firstdata_form'] select.cc_date {
 	display: inline;
-	margin-left: 10px;
 	margin-right: 10px;
 }
 
@@ -73,34 +51,14 @@ form[name='site_app_firstdata_form'] select.cc_date_year {
 	width: 70px;
 }
 
-form[name='site_app_firstdata_form'] button {
-	width: 100px;
-	background: #00649C;
-	color: #fff;
-	height: 30px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	border: 1p solid #999;
-}
-
-form[name='site_app_firstdata_form'] button:hover {
-	background: #EF7247;
-}
 
 /* jQuery Validate 
 example: http://webdesigntutsplus.s3.amazonaws.com/tuts/214_html5_form_validation/demo/index.html
 */
 div.success input {
-	box-shadow: 0 0 5px #5CD053;
-	-moz-box-shadow: 0 0 5px #5CD053;
-	-webkit-box-shadow: 0 0 5px #5CD053;
 	border-color: #28921F;
 }
 
 div.error input {
-       box-shadow: 0 0 5px #D45252;
-       -moz-box-shadow: 0 0 5px #D45252;
-       -webkit-box-shadow: 0 0 5px #D45252;
        border-color: #B03535;
 }
