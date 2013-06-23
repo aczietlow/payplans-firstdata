@@ -68,98 +68,20 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 		
 		$invoice = $payment->getInvoice(PAYPLANS_INSTANCE_REQUIRE);
-		$amount = $invoice->getTotal();
-		$time = $this->_getDateTime();
-		$hash = $this->_createHash($this->getAppParam('store_name'), $amount, $time);
+		
+		
 		$root = JURI::root();
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		
-		//debug *************************
-		
-		
-// 		$transaction = PayplansApi::getTransaction(94);
-// 		$params = $this->_getTransactionParams($transaction, '555');
-		
-// 		$newTransaction = PayplansTransaction::getInstance();
-// 		foreach ($params as $key => $value) {
-// 			$newTransaction->setParam($key, $value);
-// 		}
-// 		$newParams = $this->_getTransactionParams($newTransaction, '2153');
-// 		krumo($newParams);
-		
-// 		$testPayment = PayplansApi::getPayment(38);
-// 		$methods = get_class_methods($testPayment);
-// 		$testTrans = $testPayment->getTransactions();
-// 		krumo($methods);
-// 		krumo($testTrans);
-		
-		
-		
-// 		$user		 = PayplansUser::getInstance($transaction->getBuyer());
-		
-// 		$emailAddresses = $this->getAppParam('emails');
-// 		$emailAddresses = explode(',', $emailAddresses);
-// 		krumo($emailAddresses);
-		
-// 		$methods = get_class_methods($subscription);
-// 		krumo($methods);
-// 		krumo($user->getEmail());
-// 		krumo($subscription->getId());
-// 		$params = PayplansApi::getTransaction(94)->getParams()->toArray();
-// 		$params = PayplansApi::getTransaction(94)->getProperties();
-// 		krumo($params);
+		//debug ****************************
 		// end debug ***********************
 		
 		//build url
 		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		//replace invalid timezone strings
-		if ($timezone == 'EDT') {
-			$timezone == 'EST';
-		}
-		//TODO: do these to be initialized before the form post back?
-		$postFields = array(
-				//personal user data
-				'bname' => $_POST['name'],
-				'baddr1' => $_POST['address'],
-				'city' => $_POST['city'],
-				'state' => $_POST['state'],
-				'zip' => $_POST['zip'],
-				'phone' => $_POST['phone'],
-				
-				//firstdata fields
-				'txntype' => 'sale', 
-				'timezone' => 'EST', //@TODO use timezone variable 
-				'txndatetime' => $time, 
-				'hash' => $hash, 
-				'storename' => $this->getAppParam('store_name'), 
-		    	'mode' => $this->getAppParam('pay_mode'), 
-				'chargetotal' => $amount, 
-				'subtotal' => $amount, 
-				'trxOrigin' => "ECI",
-				'paymentMethod' => $_POST['paymentMethod'],
-				
-				//payment info
-				'cardnumber' => $_POST['cardnumber'], 
-				'expmonth' => $_POST['expmonth'], 
-				'expyear' => $_POST['expyear'],
-				
-				'phone' => $_POST['phone'],
-				
-				//payplans info
-				'order_id' => $invoice->getKey(), 
-				'invoice' => $payment->getKey(),
-				'item_name' => $invoice->getTitle(), 
-				'item_number' => $invoice->getKey(),
-				 
-				//return info
-				'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
-				'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),	
-		);
-		
-		$postFields = http_build_query($postFields);
+
 		
 		//if invoice is recurring
 		if ($invoice->isRecurring() != FALSE) {
@@ -191,17 +113,55 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 		
 		$this->assign('identifier', TRUE);
+		
 		//if our form data has been posted back to controller
 		if ($_POST['identifier'] == TRUE && empty($_POST['status'])) {
 			
+			//replace invalid timezone strings
+			if ($timezone == 'EDT') {
+				$timezone == 'EST';
+			}
+			
+			$amount = $invoice->getTotal();
+			$time = $this->_getDateTime();
+			$hash = $this->_createHash($this->getAppParam('store_name'), $amount, $time);
+			
+			$postFields = array(
+					//firstdata fields
+					'txntype' => 'sale',
+					'timezone' => 'EST', //@TODO use timezone variable
+					'txndatetime' => $time,
+					'hash' => $hash,
+					'storename' => $this->getAppParam('store_name'),
+					'mode' => $this->getAppParam('pay_mode'),
+					'chargetotal' => $amount,
+					'subtotal' => $amount,
+					'trxOrigin' => "ECI",
+			
+					//payplans info
+					'order_id' => $invoice->getKey(),
+					'invoice' => $payment->getKey(),
+					'item_name' => $invoice->getTitle(),
+					'item_number' => $invoice->getKey(),
+						
+					//return info
+					'responseSuccessURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=success&payment_key=' . $payment->getKey(),
+					'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),
+			);
+			
 			$subscriptionDetails = $this->_getSubscriptionDetails();
 			
-			foreach ($subscriptionDetails as $key => $value) {
+			//Capture all the data from the post fields and addes it to the array for the curl request
+			foreach ($_POST as $key => $value) {
 				$subscription->setParam($key,$value);
-				$postFields[$key] = $value;
+  	  	$postFields[$key] = $value;
 			}
 			
 			$subscription->save();
+			
+			
+			
+			//$postFields = http_build_query($postFields);
 			
 			//@TODO build real referrer url
 			$referer = $root . 'firstdata/referer.php';
@@ -217,7 +177,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 
 			$this->assign('ch', $ch);
 
-			return $this->_render('curl_form');
+			return $this->_render('curl_form', $postFields);
 		}
 
 		return $this->_render('form');

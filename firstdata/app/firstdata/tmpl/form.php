@@ -24,24 +24,32 @@ function paypalSubmit()
 		<!-- Personal Info (Full PayPlus Mode) -->
 		<div id="name-description"></div>
 		<div class='firstdataInput'>
-			<label>Full Name *<input type='text' name='name' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
+			<label>Full Name *<input type='text' name='bname' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Address *<input type="text" name='address' data-required /></label>
+			<label>Address *<input type="text" name='baddr1' data-required /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>City *<input type="text" name='city' data-required/></label>
+			<label>City *<input type="text" name='bcity' data-required/></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>State *<select size="1" name="state" >
+		  <label>Country <select name='bcountry' data-required>
+		    <option value="US"> United States </option>
+		    <option value="CA"> Canada </option>
+		  </select>
+		  </label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>State *<select size="1" name="bstate" >
 				<option value = "AL"> Alabama </option>
-		    	<option value = "AK"> Alaska </option>
-		    	<option value = "AR"> Arkansas </option>
-		    	<option value = "AZ"> Arizona </option>
-		    	<option value = "CA"> California </option>
+		    <option value = "AK"> Alaska </option>
+		    <option value = "AR"> Arkansas </option>
+		    <option value = "AZ"> Arizona </option>
+		    <option value = "CA"> California </option>
 				<option value = "CT"> Connecticut </option>
 				<option value = "DE"> Delaware </option>
 				<option value = "FL"> Flordia </option>
@@ -90,8 +98,9 @@ function paypalSubmit()
 			</label>
 		</div>
 		
+		
 		<div class='firstdataInput'>
-			<label>Zip *<input type="text" name='zip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
+			<label>Zip *<input type="text" name='bzip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
 		</div>
 		
 		<div class='firstdataInput'>

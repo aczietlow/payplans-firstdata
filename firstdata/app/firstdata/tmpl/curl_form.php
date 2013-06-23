@@ -20,8 +20,12 @@ function paypalSubmit()
 </script>
 	<?php
 	if ($identifier == TRUE && empty($_POST['status'])) {
-		curl_exec($ch);
-		curl_close($ch); 
+// 		curl_exec($ch);
+// 		curl_close($ch); 
+  include_once '../Krumo/class.krumo.php';
+//    foreach ($args as $key => $value) {
+    krumo($args);
+// 	}
 	}
 	?>
 
