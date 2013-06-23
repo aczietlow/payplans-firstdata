@@ -149,35 +149,31 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 					'responseFailURL' => $root . 'index.php?option=com_payplans&gateway=firstdata&view=payment&task=complete&action=cancel&payment_key=' . $payment->getKey(),
 			);
 			
-			$subscriptionDetails = $this->_getSubscriptionDetails();
+			
 			
 			//Capture all the data from the post fields and addes it to the array for the curl request
+			
 			foreach ($_POST as $key => $value) {
-				$subscription->setParam($key,$value);
-  	  	$postFields[$key] = $value;
+				if ($key != 'identifier' || $key != 'payplans_payment_btn') {
+  	  	  $postFields[$key] = $value;
+  	  	  if ($key != 'cardnumber' || $key != 'expmonth' || $key != 'expyear') {
+      			$subscription->setParam($key,$value);
+  	  	  }
+				}
 			}
 			
 			$subscription->save();
 			
+			$postFields = http_build_query($postFields);
 			
-			
-			//$postFields = http_build_query($postFields);
-			
-			//@TODO build real referrer url
+			//@TODO build real referrer page
 			$referer = $root . 'firstdata/referer.php';
-			$ch = curl_init();
 			
-			curl_setopt_array($ch, array(
-			  CURLOPT_URL => $url,
-			  CURLOPT_FOLLOWLOCATION => TRUE, 
-			  CURLOPT_POST => TRUE,
-			  CURLOPT_POSTFIELDS => $postFields, 
-			  CURLOPT_REFERER => $referer, 
-			  CURLOPT_SSL_VERIFYPEER => FALSE,));
-
-			$this->assign('ch', $ch);
-
-			return $this->_render('curl_form', $postFields);
+			$this->assign('referer', $referer);
+			$this->assign('url', $url);
+			$this->assign('postFields', $postFields);
+			
+			return $this->_render('curl_form');
 		}
 
 		return $this->_render('form');
