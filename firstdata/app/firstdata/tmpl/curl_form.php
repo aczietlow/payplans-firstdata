@@ -8,7 +8,7 @@ if(defined('_JEXEC')===false) die();?>
 <script type="text/javascript">
 jQuery(document).ready(function() {
 	tranStatus = $('input[name="r_approved"]').val();
-	
+
 	//successful transaction
 	if (tranStatus == "APPROVED") {
 		$('input[name="Checkout2"]').trigger('click');

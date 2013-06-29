@@ -62,3 +62,7 @@ div.success input {
 div.error input {
        border-color: #B03535;
 }
+
+input[value="Show Receipt"] {
+	display:none;
+}
