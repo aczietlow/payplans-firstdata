@@ -24,24 +24,32 @@ function paypalSubmit()
 		<!-- Personal Info (Full PayPlus Mode) -->
 		<div id="name-description"></div>
 		<div class='firstdataInput'>
-			<label>Full Name *<input type='text' name='name' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
+			<label>Full Name *<input type='text' name='bname' data-required data-pattern="^([A-z]*((\s)))+[A-z]*$"  data-describedby="name-description" data-description="name" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>Address *<input type="text" name='address' data-required /></label>
+			<label>Address *<input type="text" name='baddr1' data-required /></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>City *<input type="text" name='city' data-required/></label>
+			<label>City *<input type="text" name='bcity' data-required/></label>
 		</div>
 		
 		<div class='firstdataInput'>
-			<label>State *<select size="1" name="state" >
+		  <label>Country <select name='bcountry' data-required>
+		    <option value="US"> United States </option>
+		    <option value="CA"> Canada </option>
+		  </select>
+		  </label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>State *<select size="1" name="bstate" >
 				<option value = "AL"> Alabama </option>
-		    	<option value = "AK"> Alaska </option>
-		    	<option value = "AR"> Arkansas </option>
-		    	<option value = "AZ"> Arizona </option>
-		    	<option value = "CA"> California </option>
+		    <option value = "AK"> Alaska </option>
+		    <option value = "AR"> Arkansas </option>
+		    <option value = "AZ"> Arizona </option>
+		    <option value = "CA"> California </option>
 				<option value = "CT"> Connecticut </option>
 				<option value = "DE"> Delaware </option>
 				<option value = "FL"> Flordia </option>
@@ -86,12 +94,27 @@ function paypalSubmit()
 				<option value = "WV"> West Virginia </option>
 				<option value = "WI"> Wisconsin </option>
 				<option value = "WY"> Wyoming </option>
+				<option value = "AB"> Alberta </option>
+        <option value = "BC">British Columbia</option>
+        <option value = "MB">Manitoba</option>
+        <option value = "NB">New Brunswick</option>
+        <option value = "NF">Newfoundland</option>
+        <option value = "NS">Nova Scotia</option>
+        <option value = "NT">Northwest Territories</option>
+        <option value = "NU">Nunvut</option>
+        <option value = "ON">Ontario</option>
+        <option value = "PE">Prince Edward Island</option>
+        <option value = "QC">Quebec</option>
+        <option value = "NS">Nova Sc</option>
+        <option value = "SK">Saskatchewan</option>
+        <option value = "YT">Yukon Territory</option>
 			</select>
 			</label>
 		</div>
 		
+		
 		<div class='firstdataInput'>
-			<label>Zip *<input type="text" name='zip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
+			<label>Zip *<input type="text" name='bzip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
 		</div>
 		
 		<div class='firstdataInput'>

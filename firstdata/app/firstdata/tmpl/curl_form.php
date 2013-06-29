@@ -23,7 +23,17 @@ jQuery(document).ready(function() {
 	//using for debugging only
 	
 	if ($identifier == TRUE && empty($_POST['status'])) {
-		curl_exec($ch);
+    
+    $ch = curl_init();
+    	
+    curl_setopt_array($ch, array(
+    CURLOPT_URL => $url,
+    CURLOPT_FOLLOWLOCATION => TRUE,
+    CURLOPT_POST => TRUE,
+    CURLOPT_POSTFIELDS => $postFields,
+    CURLOPT_REFERER => $referer,
+    CURLOPT_SSL_VERIFYPEER => FALSE,));		
+    curl_exec($ch);
 		curl_close($ch); 
 	}
 	?>
