@@ -121,10 +121,83 @@ function paypalSubmit()
 			<label>Phone *<input type="text" name='phone' data-required data-pattern="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-?\d{4}"  /></label>
 		</div>
 		
+		<div class='firstdataInput'>
+			<label>Membership #<input type="text" name='membership' /></label>
+		</div>
 	</div>
 	
 	<div class="ccInfo">
 		<!-- NBHA specific information -->
+		<div class='firstdataInput'>
+			<label>Sex *<select size="1" name="sex">
+				<option value="M"> Male </option>
+				<option value="F"> Female </option>
+			</select>
+			</label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Date of Birth *<input type="text" id="date" name='dob' data-required /></label>
+		</div>
+		
+		<!-- Add date pattern for ssn without slashes -->
+		<div class='firstdataInput'>
+			<label>District #<input type="text" name='compDistrict' /></label>
+		</div>
+		
+		<div class='firstdataInput'>
+			<label>Competing State *<select size="1" name="compState">
+				<option value = "AL"> Alabama </option>
+		    	<option value = "AK"> Alaska </option>
+		    	<option value = "AR"> Arkansas </option>
+		    	<option value = "CA"> California </option>
+				<option value = "CT"> Connecticut </option>
+				<option value = "DE"> Delaware </option>
+				<option value = "FL"> Flordia </option>
+				<option value = "GA"> Georgia </option>
+				<option value = "HI"> Hawaii </option>
+				<option value = "ID"> Idaho </option>
+				<option value = "IL"> Illinois </option>
+				<option value = "IN"> Indiana </option>
+				<option value = "IA"> Iowa </option>
+				<option value = "KS"> Kansas </option>
+				<option value = "KY"> Kentucky </option>
+				<option value = "LA"> Louisiana </option>
+				<option value = "ME"> Maine </option>
+				<option value = "MD"> Maryland </option>
+				<option value = "MA"> Masschusetts </option>
+				<option value = "MI"> Michigan </option>
+				<option value = "MN"> Minnesota </option>
+				<option value = "MS"> Mississippi </option>
+				<option value = "MO"> Missouri </option>
+				<option value = "MT"> Montana </option>
+				<option value = "NE"> Nebraska </option>
+				<option value = "NV"> Nevada </option>
+				<option value = "NH"> New Hampshire </option>
+				<option value = "NJ"> New Jersey </option>
+				<option value = "NM"> New Mexico </option>
+				<option value = "NY"> New York </option>
+				<option value = "NC"> North Carolina </option>
+				<option value = "ND"> North Dakota </option>
+				<option value = "OH"> Ohio </option>
+				<option value = "OK"> Oklahoma </option>
+				<option value = "OR"> Oregon </option>
+				<option value = "PA"> Pennsylvania </option>
+				<option value = "RI"> Rhode Island </option>
+				<option value = "SC"> South Carolina </option>
+				<option value = "SD"> South Dakota </option>
+				<option value = "TN"> Tennessee </option>
+				<option value = "TX"> Texas </option>
+				<option value = "UT"> Utah </option>
+				<option value = "VT"> Vermont </option>
+				<option value = "VA"> Virginia </option>
+				<option value = "WA"> Washington </option>
+				<option value = "WV"> West Virginia </option>
+				<option value = "WI"> Wisconsin </option>
+				<option value = "WY"> Wyoming </option>
+			</select>
+			</label>
+		</div>
 		
 		<!-- CC information (Pay Only) -->
 		<div class='firstdataInput'>

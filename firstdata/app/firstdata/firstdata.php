@@ -137,6 +137,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 					'chargetotal' => $amount,
 					'subtotal' => $amount,
 					'trxOrigin' => "ECI",
+					
+					//nbha specific fields
+					'sex' => $_POST['sex'],
+					'dob' => $_POST['dob'],
+					'ssn' => $_POST['ssn'],
+					'district' => $_POST['compDistrict'],
+					'compState' => $_POST['compstate'],
 			
 					//payplans info
 					'order_id' => $invoice->getKey(),
