@@ -74,8 +74,10 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
-		
+		$user = PayplansApi::getUser($subscription->getBuyer());
 		//debug ****************************
+		$methods = get_class_methods($user);
+		krumo($methods);
 		// end debug ***********************
 		
 		//build url
@@ -152,15 +154,23 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			
 			
 			//Capture all the data from the post fields and addes it to the array for the curl request
-			
 			foreach ($_POST as $key => $value) {
 				if ($key != 'identifier' || $key != 'payplans_payment_btn') {
   	  	  $postFields[$key] = $value;
   	  	  if ($key != 'cardnumber' || $key != 'expmonth' || $key != 'expyear') {
       			$subscription->setParam($key,$value);
+      			$user->setParam($key, $value);
   	  	  }
 				}
 			}
+			
+			//adds user address information to payplans user object
+			$user->setAddress($_POST['baddr1']);
+			$user->setState($_POST['bstate']);
+			$user->setCity($_POST['bcity']);
+			$user->setCountry($_POST['bcountry']);
+			$user->setZipcode($_POST['bzip']);
+			$user->save();
 			
 			$subscription->save();
 			
