@@ -76,8 +76,14 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		$user = PayplansApi::getUser($subscription->getBuyer());
 		//debug ****************************
-		$methods = get_class_methods($user);
-		krumo($methods);
+// 		$test = array( 
+// 					'order_id' => $invoice->getKey(),
+// 					'invoice' => $payment->getKey(),
+// 					'item_name' => $invoice->getTitle(),
+// 					'item_number' => $invoice->getKey(),
+// 				);
+// 		$foo = $test;
+// 		$this->_trackPostFields($foo);
 		// end debug ***********************
 		
 		//build url
@@ -172,8 +178,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$user->setZipcode($_POST['bzip']);
 			$user->save();
 			
+			//save data to subscription object
 			$subscription->save();
 			
+			//create copy of array for logging purposes
+			$formData = $postFields;
+			
+			//sanitize array for http query
 			$postFields = http_build_query($postFields);
 			
 			//@TODO build real referrer page
@@ -182,6 +193,9 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$this->assign('referer', $referer);
 			$this->assign('url', $url);
 			$this->assign('postFields', $postFields);
+			
+			//log all post data for tracking purposes.
+			$this->_trackPostFields($formData);
 			
 			return $this->_render('curl_form');
 		}
@@ -455,5 +469,39 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$params['txndatetime'] = $this->_getDateTime();
 		$params['payment_key'] = $paymentKey;
 		return $params;
+	}
+	
+	/**
+	 * Writes all form data and user data to log file prior to transaction
+	 * @param array $formData
+	 */
+	protected function _trackPostFields($formData) {
+		//Unset sensative information.
+		if(isset($formData['cardnumber'])) {
+			unset($formData['cardnumber']);
+		}
+		if(isset($formData['expmonth'])) {
+			unset($formData['expmonth']);
+		}
+		if(isset($formData['expyear'])) {
+			unset($formData['expyear']);
+		}
+		
+		$logFile = dirname(getcwd());
+		$logFile .= '/public_html/plugins/payplans/firstdata/firstdataAttempts.csv';
+		
+		$fh = fopen($logFile, 'a+');
+		
+		//If file is empty, write csv headers from formData array keys.
+		if (filesize($logFile) == 0) {
+			$headers = array();
+			foreach($formData as $key => $value) {
+				$headers[] = $key;
+			}
+			fputcsv($fh, $headers);
+		}
+		
+		fputcsv($fh, $formData);
+		fclose($fh);
 	}
 }
