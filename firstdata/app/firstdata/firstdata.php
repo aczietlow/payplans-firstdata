@@ -81,6 +81,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 		//debug ****************************
+		$this->_trackPostFieldsDb('test');
 		// end debug ***********************
 		
 		//if invoice is recurring
@@ -464,7 +465,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 	}
 	
 	/**
-	 * Writes all form data and user data to log file prior to transaction
+	 * Prepares all form data to be logged
 	 * @param array $formData
 	 */
 	protected function _trackPostFields($formData) {
@@ -479,6 +480,15 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			unset($formData['expyear']);
 		}
 		
+		$this->_trackPostFieldsCsv($formData);
+		$this->_trackPostFieldsDb($formData);
+	}
+	
+	/**
+	 * Writes all formdata to csv file
+	 * @param array $formData
+	 */
+	protected function _trackPostFieldsCsv($formData) {
 		$logFile = dirname(getcwd());
 		$logFile .= '/public_html/plugins/payplans/firstdata/firstdataAttempts.csv';
 		
@@ -496,4 +506,43 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		fputcsv($fh, $formData);
 		fclose($fh);
 	}
+	
+	/**
+	 * Writes all formdata to DB table
+	 * @param array $formData
+	 */
+	protected function _trackPostFieldsDb($formData) {
+		//check if table already exists
+		$db = JFactory::getDBO();
+		$query = "SHOW tables;";
+		$db->setQuery($query);
+		$tables = $db->loadAssocList();
+		
+		$check = 'dne';
+		foreach($tables as $table) {
+			foreach($table as $value) {
+				$dumpTables[] = $value;
+				if($value == $db->getPrefix(). 'test') {
+					$check = 'exists';
+					krumo($db->getPrefix(). "test table exists");
+				}
+			}
+		}
+		krumo($dumpTables);
+		//If table does not exist, create it.
+		if($check == 'dne') {
+			//Get name to be used for column names in table.
+			$column_names = array();
+// 			foreach($formData as $key => $value) {
+// 				$column_names[] = $key;
+// 			}
+			krumo('created table');
+			$table = $db->getPrefix() . 'test';
+			$db = JFactory::getDBO();
+			$query = "CREATE TABLE $table ;";
+			$db->setQuery($query);
+			$db->query();
+		}
+	}
 }
+
