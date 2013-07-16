@@ -75,21 +75,13 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
 		$user = PayplansApi::getUser($subscription->getBuyer());
-		//debug ****************************
-// 		$test = array( 
-// 					'order_id' => $invoice->getKey(),
-// 					'invoice' => $payment->getKey(),
-// 					'item_name' => $invoice->getTitle(),
-// 					'item_number' => $invoice->getKey(),
-// 				);
-// 		$foo = $test;
-// 		$this->_trackPostFields($foo);
-		// end debug ***********************
 		
 		//build url
-		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
+		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'http://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
+		//debug ****************************
+		// end debug ***********************
 		
 		//if invoice is recurring
 		if ($invoice->isRecurring() != FALSE) {
