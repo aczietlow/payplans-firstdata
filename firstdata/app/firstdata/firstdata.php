@@ -81,7 +81,6 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 		//debug ****************************
-		$this->_trackPostFieldsDb('test');
 		// end debug ***********************
 		
 		//if invoice is recurring
@@ -481,7 +480,7 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		}
 		
 		$this->_trackPostFieldsCsv($formData);
-		$this->_trackPostFieldsDb($formData);
+		//$this->_trackPostFieldsDb($formData);
 	}
 	
 	/**
@@ -533,9 +532,9 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		if($check == 'dne') {
 			//Get name to be used for column names in table.
 			$column_names = array();
-// 			foreach($formData as $key => $value) {
-// 				$column_names[] = $key;
-// 			}
+			foreach($formData as $key => $value) {
+				$column_names[] = $key;
+			}
 			krumo('created table');
 			$table = $db->getPrefix() . 'test';
 			$db = JFactory::getDBO();

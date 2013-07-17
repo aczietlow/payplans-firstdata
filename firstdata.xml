@@ -13,14 +13,4 @@
 		<filename plugin="firstdata">firstdata.php</filename>
 		<folder>firstdata</folder>
 	</files>
-	<install folder="firstdata">
-        <sql>
-            <file driver="mysql" charset="utf8">sql/firstdata.install.sql</file>
-        </sql>
-    </install>
-    <uninstall folder="firstdata">
-        <sql>
-            <file driver="mysql" charset="utf8">sql/firstdata.uninstall.sql</file>
-        </sql>
-    </uninstall>
 </extension>
