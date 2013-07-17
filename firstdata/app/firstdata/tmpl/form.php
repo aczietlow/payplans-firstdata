@@ -94,6 +94,7 @@ function paypalSubmit()
 				<option value = "WV"> West Virginia </option>
 				<option value = "WI"> Wisconsin </option>
 				<option value = "WY"> Wyoming </option>
+				<option value = "PR"> Puerto Rico </option>
 				<option value = "AB"> Alberta </option>
         <option value = "BC">British Columbia</option>
         <option value = "MB">Manitoba</option>

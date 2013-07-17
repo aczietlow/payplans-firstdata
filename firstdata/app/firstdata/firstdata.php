@@ -74,14 +74,14 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$timezone = date('T');
 		
 		$subscription = PayplansApi::getSubscription($invoice->getReferenceObject());
-		
-		//debug ****************************
-		// end debug ***********************
+		$user = PayplansApi::getUser($subscription->getBuyer());
 		
 		//build url
-		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'https://';
+		$protocol = ($_SERVER['HTTPS']) ? 'https://' : 'http://';
 		$post_url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
+		//debug ****************************
+		// end debug ***********************
 		
 		//if invoice is recurring
 		if ($invoice->isRecurring() != FALSE) {
@@ -159,18 +159,31 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			
 			
 			//Capture all the data from the post fields and addes it to the array for the curl request
-			
 			foreach ($_POST as $key => $value) {
 				if ($key != 'identifier' || $key != 'payplans_payment_btn') {
   	  	  $postFields[$key] = $value;
   	  	  if ($key != 'cardnumber' || $key != 'expmonth' || $key != 'expyear') {
       			$subscription->setParam($key,$value);
+      			$user->setParam($key, $value);
   	  	  }
 				}
 			}
 			
+			//adds user address information to payplans user object
+			$user->setAddress($_POST['baddr1']);
+			$user->setState($_POST['bstate']);
+			$user->setCity($_POST['bcity']);
+			$user->setCountry($_POST['bcountry']);
+			$user->setZipcode($_POST['bzip']);
+			$user->save();
+			
+			//save data to subscription object
 			$subscription->save();
 			
+			//create copy of array for logging purposes
+			$formData = $postFields;
+			
+			//sanitize array for http query
 			$postFields = http_build_query($postFields);
 			
 			//@TODO build real referrer page
@@ -179,6 +192,9 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			$this->assign('referer', $referer);
 			$this->assign('url', $url);
 			$this->assign('postFields', $postFields);
+			
+			//log all post data for tracking purposes.
+			$this->_trackPostFields($formData);
 			
 			return $this->_render('curl_form');
 		}
@@ -453,4 +469,86 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 		$params['payment_key'] = $paymentKey;
 		return $params;
 	}
+	
+	/**
+	 * Prepares all form data to be logged
+	 * @param array $formData
+	 */
+	protected function _trackPostFields($formData) {
+		//Unset sensative information.
+		if(isset($formData['cardnumber'])) {
+			unset($formData['cardnumber']);
+		}
+		if(isset($formData['expmonth'])) {
+			unset($formData['expmonth']);
+		}
+		if(isset($formData['expyear'])) {
+			unset($formData['expyear']);
+		}
+		
+		$this->_trackPostFieldsCsv($formData);
+		//$this->_trackPostFieldsDb($formData);
+	}
+	
+	/**
+	 * Writes all formdata to csv file
+	 * @param array $formData
+	 */
+	protected function _trackPostFieldsCsv($formData) {
+		$logFile = dirname(getcwd());
+		$logFile .= '/public_html/plugins/payplans/firstdata/firstdataAttempts.csv';
+		
+		$fh = fopen($logFile, 'a+');
+		
+		//If file is empty, write csv headers from formData array keys.
+		if (filesize($logFile) == 0) {
+			$headers = array();
+			foreach($formData as $key => $value) {
+				$headers[] = $key;
+			}
+			fputcsv($fh, $headers);
+		}
+		
+		fputcsv($fh, $formData);
+		fclose($fh);
+	}
+	
+	/**
+	 * Writes all formdata to DB table
+	 * @param array $formData
+	 */
+	protected function _trackPostFieldsDb($formData) {
+		//check if table already exists
+		$db = JFactory::getDBO();
+		$query = "SHOW tables;";
+		$db->setQuery($query);
+		$tables = $db->loadAssocList();
+		
+		$check = 'dne';
+		foreach($tables as $table) {
+			foreach($table as $value) {
+				$dumpTables[] = $value;
+				if($value == $db->getPrefix(). 'test') {
+					$check = 'exists';
+					krumo($db->getPrefix(). "test table exists");
+				}
+			}
+		}
+		krumo($dumpTables);
+		//If table does not exist, create it.
+		if($check == 'dne') {
+			//Get name to be used for column names in table.
+			$column_names = array();
+			foreach($formData as $key => $value) {
+				$column_names[] = $key;
+			}
+			krumo('created table');
+			$table = $db->getPrefix() . 'test';
+			$db = JFactory::getDBO();
+			$query = "CREATE TABLE $table ;";
+			$db->setQuery($query);
+			$db->query();
+		}
+	}
 }
+
