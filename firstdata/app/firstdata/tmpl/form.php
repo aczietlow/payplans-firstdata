@@ -243,6 +243,7 @@ function paypalSubmit()
 		
 		<input type="hidden" name="identifier" value="TRUE" />
 		<div id="payment-submit" class="pp-gap-top20">
+			<img src="plugins/payplans/firstdata/firstdata/app/firstdata/tmpl/arrow_right.png" alt="->" />
 			<button type="submit" name="payplans_payment_btn">Pay Now</button>
 		</div>
 	</div>

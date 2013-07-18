@@ -20,23 +20,66 @@ form[name='site_app_firstdata_form'] {
 	padding: 10px;
 }
 
-form[name='site_app_firstdata_form'] input {
+form[name='site_app_firstdata_form'] input, label, button, textarea {
+	font-size: 14px;
+  font-weight: strong;
+  line-height: 20px;
 	width: 150px;
 	display: block;
-}
-
-form[name='site_app_firstdata_form'] input.focus {
 	
+	border-radius: 3px 3px 3px 3px;
+  color: #555555;
+  /*display: inline-block;*/
+}
+
+form[name='site_app_firstdata_form'] input, textarea, select {
+	height: 30px;
+}
+
+#payment-submit {
+	position: relative;
+}
+
+#payment-submit button {
+	border-radius: 10px 10px 10px 10px;
+	color: #FFFFFF;
+	line-height: 35px;
+	
+	background-image: linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
+	background-image: -o-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
+	background-image: -moz-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
+	background-image: -webkit-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
+	background-image: -ms-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
+	
+	background-image: -webkit-gradient(
+	  linear,
+	  left bottom,
+	  left top,
+	  color-stop(0.23, rgb(250,144,15)),
+	  color-stop(0.62, rgb(240,170,48)),
+	  color-stop(0.81, rgb(254,182,0))
+	);
+}
+
+#payment-submit img {
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	top: 8px;
+	left: 5px;
+}
+
+form[name='site_app_firstdata_form'] label {
+    display: block; 
+    margin-bottom: 5px;
 }
 
 form[name='site_app_firstdata_form'] select {
 	display: block;
-}
-
-form[name='site_app_firstdata_form'] select {
 	width: 150px;
+	border-radius: 3px 3px 3px 3px;
+  color: #555555;
 }
-
 
 form[name='site_app_firstdata_form'] select.cc_date {
 	display: inline;
