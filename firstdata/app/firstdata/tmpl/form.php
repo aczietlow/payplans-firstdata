@@ -115,7 +115,7 @@ function paypalSubmit()
 		
 		
 		<div class='firstdataInput'>
-			<label>Zip *<input type="text" name='bzip' data-required data-pattern="\d{5}(-\d{4})?" /></label>
+			<label>Zip *<input type="text" name='bzip' data-required data-pattern="(\d{5}(-\d{4})?)|(?i)([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d)" /></label>
 		</div>
 		
 		<div class='firstdataInput'>
