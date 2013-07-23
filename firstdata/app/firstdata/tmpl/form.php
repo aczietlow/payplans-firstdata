@@ -46,10 +46,11 @@ function paypalSubmit()
 		<div class='firstdataInput'>
 			<label>State *<select size="1" name="bstate" >
 				<option value = "AL"> Alabama </option>
-		    <option value = "AK"> Alaska </option>
-		    <option value = "AR"> Arkansas </option>
-		    <option value = "AZ"> Arizona </option>
-		    <option value = "CA"> California </option>
+		   		<option value = "AK"> Alaska </option>
+				<option value = "AZ"> Arizona </option>
+		   		<option value = "AR"> Arkansas </option>
+				<option value = "CA"> California </option>
+				<option value = "CO"> Colorado </option>
 				<option value = "CT"> Connecticut </option>
 				<option value = "DE"> Delaware </option>
 				<option value = "FL"> Flordia </option>
