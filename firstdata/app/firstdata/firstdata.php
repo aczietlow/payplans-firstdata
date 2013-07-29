@@ -160,12 +160,18 @@ class PayplansAppFirstdata extends PayplansAppPayment {
 			
 			//Capture all the data from the post fields and addes it to the array for the curl request
 			foreach ($_POST as $key => $value) {
-				if ($key != 'identifier' || $key != 'payplans_payment_btn') {
-  	  	  $postFields[$key] = $value;
-  	  	  if ($key != 'cardnumber' || $key != 'expmonth' || $key != 'expyear') {
-      			$subscription->setParam($key,$value);
-      			$user->setParam($key, $value);
-  	  	  }
+				if ($key != 'payplans_payment_btn') {
+					if ($key != 'identifier'){
+	  	  	  $postFields[$key] = $value;
+	  	  	  if ($key != 'cardnumber') {
+	  	  	  	if ($key != 'expmonth') {
+	  	  	  		if ($key != 'expyear') {
+			      			$subscription->setParam($key,$value);
+			      			$user->setParam($key, $value);
+	  	  	  		}
+	  	  	  	}
+	  	  	  }
+					}
 				}
 			}
 			
