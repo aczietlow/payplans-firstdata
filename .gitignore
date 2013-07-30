@@ -1,2 +1,5 @@
 #Don't track changes in log file
 firstdataAttempts.csv
+.buildpath
+.project
+.settings/

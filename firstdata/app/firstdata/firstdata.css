@@ -45,6 +45,7 @@ form[name='site_app_firstdata_form'] input, textarea, select {
 	color: #FFFFFF;
 	line-height: 35px;
 	
+	background: rgb(250,144,15);
 	background-image: linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
 	background-image: -o-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
 	background-image: -moz-linear-gradient(bottom, rgb(250,144,15) 23%, rgb(240,170,48) 62%, rgb(254,182,0) 81%);
@@ -66,7 +67,7 @@ form[name='site_app_firstdata_form'] input, textarea, select {
 	height: 25px;
 	position: absolute;
 	top: 8px;
-	left: 5px;
+	left: 15px;
 }
 
 form[name='site_app_firstdata_form'] label {
